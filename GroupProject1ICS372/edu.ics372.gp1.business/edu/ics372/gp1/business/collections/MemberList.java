@@ -24,8 +24,9 @@ public class MemberList implements Iterable<Member>, Serializable {
 	}
 	
 	// testing method
-	public void addMember(Member member) {
+	public boolean addMember(Member member) {
 		members.add(member);
+		return true;
 	}
 	
 	// Business Process 2
@@ -48,6 +49,23 @@ public class MemberList implements Iterable<Member>, Serializable {
 				System.out.println("Member [Address: " + member.getAddress() + ", Fee Paid: " + member.getFee() + ", Id: " + member.getId() + "]");
 			}
 		}
+	}
+	
+	/**
+	 * Checks whether a member with a given member id exists.
+	 * 
+	 * @param memberName the Name of the member
+	 * @return member iff member exists
+	 * 
+	 */
+	public Member search(String memberName) {
+		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
+			Member member = iterator.next();
+			if (member.getName().equals(memberName)) {
+				return member;
+			}
+		}
+		return null;
 	}
 	
 	// Business Process 10

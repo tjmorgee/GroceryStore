@@ -35,7 +35,7 @@ import edu.ics372.gp1.business.entities.Transaction;
  *
  */
 public abstract class DataTransfer {
-	private int productId;
+	private String productId;
 	private String productName;
 	private double productPrice;
 	private int productReorderLevel;
@@ -55,11 +55,11 @@ public abstract class DataTransfer {
 		reset();
 	}
 
-	public int getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(String productId) {
 		this.productId = productId;
 	}
 
@@ -181,6 +181,7 @@ public abstract class DataTransfer {
 	 * Sets all String fields to "none"
 	 */
 	public void reset() {
+		productId = "No such Product";
 		productName = "No such product";
 		memberId = "Invalid member id";
 		memberName = "No such member";
