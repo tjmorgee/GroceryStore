@@ -32,10 +32,13 @@ import java.util.LinkedList;
 
 import edu.ics372.gp1.business.collections.Catalog;
 import edu.ics372.gp1.business.collections.MemberList;
+import edu.ics372.gp1.business.collections.OutstandingOrderList;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Member;
+import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
+import edu.ics372.gp1.business.iterators.SafeOrderIterator;
 
 /**
  * The facade class handling all requests from users.
@@ -47,6 +50,7 @@ public class GroceryStore implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Catalog catalog = Catalog.getInstance();
 	private MemberList members = MemberList.getInstance();
+	private OutstandingOrderList orders = OutstandingOrderList.getInstance();
 	private static GroceryStore groceryStore;
 
 	/**
@@ -62,7 +66,7 @@ public class GroceryStore implements Serializable {
 	 * @return the singleton object
 	 */
 	public static GroceryStore instance() {
-		if (groceryStore == null) {
+		if (groceryStore.equals(null)) {
 			return groceryStore = new GroceryStore();
 		} else {
 			return groceryStore;
@@ -106,6 +110,32 @@ public class GroceryStore implements Serializable {
 			return result;
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	
+	// Change Price (Working, look at result codes for final draft)
+	public Result changePrice(Request request) {
+		Result result = new Result();
+		Product product = catalog.search(request.getProductId());
+		if (product != null) {
+			product.setPrice(request.getProductPrice());
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	
+	// Create order method, use within reordering products or adding new products
+	public Result createOrder(Request request) {
+		Result result = new Result();
+		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
+		if (orders.search(order).equals(order)) {
+			result.setResultCode(Result.OPERATION_FAILED);
+			return result;
+		}
+		orders.addOrder(order);
+		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
 
@@ -203,6 +233,17 @@ public class GroceryStore implements Serializable {
 	 */
 	public Iterator<Result> getProducts() {
 		return new SafeProductIterator(catalog.iterator());
+	}
+	
+	/**
+	 * Returns an iterator to OutstandingOrderList info. The Iterator returned is a
+	 * safe one, in the sense that only copies of the Member fields are assembled into 
+	 * the objects returned via next().
+	 * 
+	 * @return an Iterator to Result - only the Order fields are valid.
+	 */
+	public Iterator<Result> getOrders(){
+		return new SafeOrderIterator(orders.iterator());
 	}
 
 	/**

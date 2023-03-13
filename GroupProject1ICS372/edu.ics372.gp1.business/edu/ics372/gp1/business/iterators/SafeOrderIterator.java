@@ -17,32 +17,33 @@
  *            the code in this module and are not responsible for any loss or
  *            damage resulting from its use.
  */
+
 package edu.ics372.gp1.business.iterators;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import edu.ics372.gp1.business.entities.Member;
+import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.facade.Result;
 
 /**
  * This Iterator implementation is tailor-made to supply a "read-only" version
- * of Member objects. The user should supply an iterator to Member as the
- * parameter to the constructor.
+ * of Order objects. The user should supply an iterator to Order as the parameter
+ * to the constructor.
  * 
- * @author Brahma Dathan
+ * @author Brahma Dathan and Thomas Morgenstern
  *
  */
-public class SafeMemberIterator implements Iterator<Result> {
-	private Iterator<Member> iterator;
+public class SafeOrderIterator implements Iterator<Result> {
+	private Iterator<Order> iterator;
 	private Result result = new Result();
 
 	/**
-	 * The user of SafeIterator must supply an Iterator to Book.
+	 * The user of SafeIterator must supply an Iterator to Order.
 	 * 
-	 * @param iterator Iterator<Book>
+	 * @param iterator Iterator<Order>
 	 */
-	public SafeMemberIterator(Iterator<Member> iterator) {
+	public SafeOrderIterator(Iterator<Order> iterator) {
 		this.iterator = iterator;
 	}
 
@@ -54,7 +55,7 @@ public class SafeMemberIterator implements Iterator<Result> {
 	@Override
 	public Result next() {
 		if (iterator.hasNext()) {
-			result.setMemberFields(iterator.next());
+			result.setOrderFields(iterator.next());
 		} else {
 			throw new NoSuchElementException("No such element");
 		}

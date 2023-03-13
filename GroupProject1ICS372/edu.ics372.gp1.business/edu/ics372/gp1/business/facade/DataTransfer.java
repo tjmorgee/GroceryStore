@@ -22,6 +22,7 @@ package edu.ics372.gp1.business.facade;
 
 //import edu.ics372.gp1.business.entities.Book;
 import edu.ics372.gp1.business.entities.Member;
+import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Transaction;
 
@@ -47,6 +48,7 @@ public abstract class DataTransfer {
 	private double memberFee;
 	private double transactionAmount;
 	private String transactionDate;
+	private int quantityOrdered;
 
 	/**
 	 * This sets all fields to "none".
@@ -157,8 +159,16 @@ public abstract class DataTransfer {
 	public void setTransactionDate(String transactionDate) {
 		this.transactionDate = transactionDate;
 	}
+	
+	public int getQuantityOrdered() {
+		return quantityOrdered;
+	}
 
-	public void setTransacionFields(Transaction transaction) {
+	public void setQuantityOrdered(int quantityOrdered) {
+		this.quantityOrdered = quantityOrdered;
+	}
+
+	public void setTransactionFields(Transaction transaction) {
 		setTransactionDate(transaction.getDate());
 		setTransactionAmount(transaction.getPaid());
 	}
@@ -175,6 +185,12 @@ public abstract class DataTransfer {
 		productPrice = product.getPrice();
 		productReorderLevel = product.getReorderLevel();
 		productStock = product.getStock();
+	}
+	
+	public void setOrderFields(Order order) {
+		productId = order.getProductId();
+		productName = order.getProductName();
+		quantityOrdered = order.getQuantityOrdered();
 	}
 
 	/**
