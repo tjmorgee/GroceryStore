@@ -41,7 +41,7 @@ public class Product implements Serializable {
 	}
 	
 	// Business Process 6 (May actually go within Catalog class, just iterate over catalog to find product given name)
-	public void retrieveProductInfo(String name) {
+	public void productInfo(String name) {
 		System.out.println("Product [ID: " + this.id + ", Price: " + this.price + ", Stock: " + this.stock + "]");
 	}
 	

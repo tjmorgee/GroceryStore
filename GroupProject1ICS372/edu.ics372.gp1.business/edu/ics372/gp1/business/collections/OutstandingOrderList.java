@@ -24,7 +24,7 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	}
 	
 	public static OutstandingOrderList getInstance() {
-		if (orders.equals(null)) {
+		if (orders == null) {
 			return orders = new OutstandingOrderList();
 		}
 		else {

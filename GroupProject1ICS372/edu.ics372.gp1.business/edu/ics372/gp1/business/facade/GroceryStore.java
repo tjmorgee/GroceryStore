@@ -66,7 +66,7 @@ public class GroceryStore implements Serializable {
 	 * @return the singleton object
 	 */
 	public static GroceryStore instance() {
-		if (groceryStore.equals(null)) {
+		if (groceryStore == null) {
 			return groceryStore = new GroceryStore();
 		} else {
 			return groceryStore;
@@ -108,6 +108,26 @@ public class GroceryStore implements Serializable {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setMemberFields(member);
 			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	
+	/**
+	 * Retrieves info for a Product given its name
+	 * 
+	 * @param name of product
+	 * @return the Product object created
+	 */
+	public Result retrieveProductInfo(String name) {
+		Result result = new Result();
+		for(Iterator<Product> iterator = catalog.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if(product.getName().equals(name)) {
+				result.setResultCode(Result.OPERATION_COMPLETED);
+				result.setProductFields(product);
+				return result;
+			}
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;

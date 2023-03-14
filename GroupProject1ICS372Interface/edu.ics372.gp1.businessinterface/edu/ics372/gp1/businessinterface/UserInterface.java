@@ -211,7 +211,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void help() {
-		System.out.println("Enter a number between 0 and 12 as explained below:");
+		System.out.println("Enter a number between 0 and 15 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
 		System.out.println(REMOVE_MEMBER + " to remove member");
@@ -219,13 +219,13 @@ public class UserInterface {
 		System.out.println(ADD_PRODUCTS + " to add products");
 		System.out.println(CHECK_OUT + " to check out");
 		System.out.println(RETRIEVE_PRODUCT_INFO + " to retrive product info");
-		System.out.println(PROCESS_SHIPMENT + " to  place a hold on a book");
-		System.out.println(CHANGE_PRICE + " to  remove a hold on a book");
-		System.out.println(PRINT_TRANSACTIONS + " to  process holds");
-		System.out.println(LIST_MEMBERS + " to  print transactions");
-		System.out.println(LIST_PRODUCTS + " to  print all members");
-		System.out.println(LIST_ORDERS + " to  print all books");
-		System.out.println(SAVE + " to  save data");
+		System.out.println(PROCESS_SHIPMENT + " to process a shipment");
+		System.out.println(CHANGE_PRICE + " to change the price of a product");
+		System.out.println(PRINT_TRANSACTIONS + " to print transactions");
+		System.out.println(LIST_MEMBERS + " to list all members");
+		System.out.println(LIST_PRODUCTS + " to list all products");
+		System.out.println(LIST_ORDERS + " to list all outstanding orders");
+		System.out.println(SAVE + " to save data");
 		System.out.println(RETRIEVE + " to retrive data");  //should only work before other commands are issued.
 		System.out.println(HELP + " for help");
 	}
@@ -246,21 +246,6 @@ public class UserInterface {
 		} else {
 			System.out.println(result.getMemberName() + "'s id is " + result.getMemberId());
 		}
-	}
-	
-	/**
-	 * Method to be called for removing members. Prompts the user for the appropriate
-	 * values and uses the appropriate GroceryStore method for removing memberss.
-	 * 
-	 */
-	public void removeMembers() {
-		do {
-			switch (result.getResultCode()) {
-			}
-			if (!yesOrNo("Remove more members?")) {
-				break;
-			}
-		} while (true);
 	}
 
 	/**
@@ -332,6 +317,25 @@ public class UserInterface {
 	}
 
 	/**
+	 * Method to change the price of a given product within the catalog. Prompts the user
+	 * for the appropriate values and uses the appropriate GroceryStore method for changing
+	 * the price of a product.
+	 * 
+	 */
+	public void changePrice() {
+		Request.instance().setProductId(getToken("Enter product id"));
+		Request.instance().setProductPrice(Double.parseDouble(getToken("Enter new price of product")));
+		Result result = groceryStore.changePrice(Request.instance());
+		if(result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("Product name and updated price");
+			System.out.println(result.getProductName() + " " + result.getProductPrice());
+		}
+		else {
+			System.out.println("Product does not exist within catalog");
+		}
+	}
+	
+	/**
 	 * Method to be called for displaying transactions. Prompts the user for the
 	 * appropriate values and uses the appropriate GroceryStore method for displaying
 	 * transactions.
@@ -349,29 +353,41 @@ public class UserInterface {
 	}
 
 	/**
-	 * Displays all members
+	 * Displays all members.
 	 */
 	public void getMembers() {
 		Iterator<Result> iterator = groceryStore.getMembers();
-		System.out.println("List of members (name, address, phone, id)");
+		System.out.println("List of members (name, id, address)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getMemberName() + " " + result.getMemberAddress() + " " + result.getMemberPhone()
-					+ " " + result.getMemberId());
+			System.out.println(result.getMemberName() + " " + result.getMemberId() + " " + result.getMemberAddress());
 		}
 		System.out.println("End of listing");
 	}
 
 	/**
-	 * Gets and prints all books.
+	 * Displays all products in the catalog.
 	 */
-	public void getBooks() {
-		Iterator<Result> iterator = groceryStore.getBooks();
-		System.out.println("List of books (title, author, id, borrower id, due date)");
+	public void getProducts() {
+		Iterator<Result> iterator = groceryStore.getProducts();
+		System.out.println("List of products (name, id, price, reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getBookTitle() + " " + result.getBookAuthor() + " " + result.getBookId() + " "
-					+ result.getBookBorrower() + " " + result.getBookDueDate());
+			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductPrice() + " "
+					+ result.getProductReorderLevel());
+		}
+		System.out.println("End of listing");
+	}
+	
+	/**
+	 * Displays all outstanding orders of the GroceryStore.
+	 */
+	public void getOrders() {
+		Iterator<Result> iterator = groceryStore.getOrders();
+		System.out.println("List of outstanding orders (product name, product id, quantity ordered)");
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getQuantityOrdered());
 		}
 		System.out.println("End of listing");
 	}
@@ -423,38 +439,41 @@ public class UserInterface {
 			case ADD_MEMBER:
 				addMember();
 				break;
-			case ADD_BOOKS:
-				addBooks();
-				break;
-			case ISSUE_BOOKS:
-				issueBooks();
-				break;
-			case RETURN_BOOKS:
-				returnBooks();
-				break;
-			case REMOVE_BOOKS:
-				removeBooks();
-				break;
-			case RENEW_BOOKS:
-				renewBooks();
-				break;
-			case PLACE_HOLD:
-				placeHold();
-				break;
-			case REMOVE_HOLD:
-				removeHold();
-				break;
-			case PROCESS_HOLD:
-				processHolds();
-				break;
-			case GET_TRANSACTIONS:
-				getTransactions();
-				break;
-			case GET_MEMBERS:
+//			case ADD_BOOKS:
+//				addBooks();
+//				break;
+//			case ISSUE_BOOKS:
+//				issueBooks();
+//				break;
+//			case RETURN_BOOKS:
+//				returnBooks();
+//				break;
+//			case REMOVE_BOOKS:
+//				removeBooks();
+//				break;
+//			case RENEW_BOOKS:
+//				renewBooks();
+//				break;
+//			case PLACE_HOLD:
+//				placeHold();
+//				break;
+//			case REMOVE_HOLD:
+//				removeHold();
+//				break;
+//			case PROCESS_HOLD:
+//				processHolds();
+//				break;
+//			case GET_TRANSACTIONS:
+//				getTransactions();
+//				break;
+			case LIST_MEMBERS:
 				getMembers();
 				break;
-			case GET_BOOKS:
-				getBooks();
+			case LIST_PRODUCTS:
+				getProducts();
+				break;
+			case LIST_ORDERS:
+				getOrders();
 				break;
 			case SAVE:
 				save();
