@@ -1,7 +1,12 @@
 package edu.ics372.gp1.business.entities;
 
 import java.io.Serializable;
-// I'll comment this all to the professor's specifications later
+/**
+ * Product represents a product of the GroceryStore.
+ * 
+ * @author Thomas Morgenstern
+ *
+ */
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -40,12 +45,20 @@ public class Product implements Serializable {
 		return this.stock;
 	}
 	
-	// Business Process 6 (May actually go within Catalog class, just iterate over catalog to find product given name)
-	public void productInfo(String name) {
-		System.out.println("Product [ID: " + this.id + ", Price: " + this.price + ", Stock: " + this.stock + "]");
+	/**
+	 * Helper method for updating stock upon processing a shipment
+	 * 
+	 * @param quantity of product ordered
+	 */
+	public void updateStock(int newStock) {
+		this.stock += newStock;
 	}
 	
-	// Business Process 8
+	/**
+	 * Helper method for changing the price of a product
+	 * 
+	 * @param new price
+	 */
 	public void setPrice(double price) {
 		this.price = price;
 	}

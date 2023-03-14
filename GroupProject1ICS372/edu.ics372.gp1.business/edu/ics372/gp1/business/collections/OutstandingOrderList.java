@@ -39,11 +39,11 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	 * 
 	 * @return order if found otherwise null.
 	 */
-	public Order search(Order order) {
+	public Order search(String productId) {
 		for (Iterator<Order> iterator = orders.iterator(); iterator.hasNext();) {
-			Order tempOrder = (Order) iterator.next();
-			if (order.getProductId().equals(tempOrder.getProductId())) {
-				return tempOrder;
+			Order order = (Order) iterator.next();
+			if (order.getProductId().equals(productId)) {
+				return order;
 			}
 		}
 		return null;
@@ -56,6 +56,15 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	 */
 	public void addOrder(Order order) {
 		orderList.add(order);
+	}
+	
+	/**
+	 * Helper method to remove orders from the list from GroceryStore.
+	 * 
+	 * @param order to be removed.
+	 */
+	public void removeOrder(Order order) {
+		orderList.remove(order);
 	}
 	
 	/**

@@ -133,12 +133,41 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
-	// Change Price (Working, look at result codes for final draft)
+	/**
+	 * Processes an outstanding order for the GroceryStore.
+	 * 
+	 * @param id of product ordered
+	 * @return updated product fields if order found
+	 */
+	public Result processShipment(Request request) {
+		Result result = new Result();
+		Order temp = orders.search(request.getProductId());
+		if (temp != null) {
+			Product product = catalog.search(temp.getProductId());
+			product.updateStock(temp.getQuantityOrdered());
+			orders.removeOrder(temp);
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+			return result;
+		}
+		else {
+			result.setResultCode(Result.OPERATION_FAILED);
+			return result;
+		}
+	}
+	
+	/**
+	 * Method for changing the price of a product
+	 * 
+	 * @param product id, product new price
+	 * @return product name, updated price if product found
+	 */
 	public Result changePrice(Request request) {
 		Result result = new Result();
 		Product product = catalog.search(request.getProductId());
 		if (product != null) {
 			product.setPrice(request.getProductPrice());
+			result.setProductFields(product);
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			return result;
 		}
@@ -146,11 +175,16 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
-	// Create order method, use within reordering products or adding new products
+	/**
+	 * Method for creating orders of a product.
+	 * 
+	 * @param product id, name, quantity ordered
+	 * @return result code signaling pass/fail
+	 */
 	public Result createOrder(Request request) {
 		Result result = new Result();
 		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
-		if (orders.search(order).equals(order)) {
+		if (orders.search(order.getProductId()).equals(order)) {
 			result.setResultCode(Result.OPERATION_FAILED);
 			return result;
 		}

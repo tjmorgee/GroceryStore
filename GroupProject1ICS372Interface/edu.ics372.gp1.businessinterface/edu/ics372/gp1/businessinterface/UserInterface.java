@@ -269,18 +269,6 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to display product info.  Prompts user for product name and
-	 * displays product id, price, and stock in hand.
-	 */
-	public void retrieveProductInfo() {
-		return;
-	}
-	
-	public void processShipment() {
-		return;
-	}
-	
-	/**
 	 * Method to check out a member's cart. Prompts the user to enter the product id
 	 * and quantity for each item. Method finds and displays the name of each item, the
 	 * number of units, the unit price, and the total price for each item.  Also calculates
@@ -289,6 +277,44 @@ public class UserInterface {
 	 */
 	public void checkOut() {
 		return;
+	}
+	
+	/**
+	 * Method for retrieving info regarding a product in the catalog. Prompts the user
+	 * for the product name and uses the appropriate GroceryStore method for retrieving the
+	 * product info. 
+	 * 
+	 */
+	public void retrieveProductInfo() {
+		Request.instance().setProductName(getToken("Enter product name"));
+		Result result = groceryStore.retrieveProductInfo(Request.instance().getProductName());
+		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("(Product id, price, stock)");
+			System.out.println(result.getProductId() + " " + result.getProductPrice() + " " + result.getProductStock());
+		} else {
+			System.out.println("Product not found within catalog");
+		}
+	}
+	
+	/**
+	 * Method for processing shipments for the GroceryStore. Prompts the user
+	 * for the appropriate value and uses the appropriate GroceryStore method for
+	 * processing an outstanding order. User can process multiple orders if needed.
+	 * 
+	 */
+	public void processShipment() {
+		boolean keepGoing;
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			Result result = groceryStore.changePrice(Request.instance());
+			if(result.getResultCode() == Result.OPERATION_COMPLETED) {
+				System.out.println("(Product id, name, updated stock)");
+				System.out.println(result.getProductId() + " " + result.getProductName() + " " + result.getProductStock());
+			} else {
+				System.out.println("Order not found within system");
+			}
+			keepGoing = yesOrNo("Process another shipment?");
+		} while (keepGoing);
 	}
 
 	/**
