@@ -30,9 +30,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import org.oobook.libraryv1.business.facade.Library;
-import org.oobook.libraryv1interface.UserInterface;
-
 import edu.ics372.gp1.business.facade.GroceryStore;
 import edu.ics372.gp1.business.facade.Request;
 import edu.ics372.gp1.business.facade.Result;
@@ -249,71 +246,49 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to be called for adding a book. Prompts the user for the appropriate
-	 * values and uses the appropriate GroceryStore method for adding the book.
-	 * 
+	 * Method to be called for removing a member.  Prompts the user for the appropriate
+	 * values and uses the appropriate method for removing a member
 	 */
-	public void addBooks() {
-		do {
-			Request.instance().setBookTitle(getName("Enter  title"));
-			Request.instance().setBookId(getToken("Enter id"));
-			Request.instance().setBookAuthor(getName("Enter author"));
-			Result result = groceryStore.addBook(Request.instance());
-			if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-				System.out.println("Book could not be added");
-			} else {
-				System.out.println("Book " + result.getBookTitle() + " added");
-			}
-		} while (yesOrNo("Add more books?"));
+	public void removeMember() {
+		return;
+	}
+	
+	/**
+	 * Method to display member info. Prompts the user for a member's name and displays
+	 * member's address, fee paid, and id.  If there is more than one member with the 
+	 * same name, print all such members.
+	 */
+	public void retrieveMemberInfo() {
+		return;
+	}
+	/**
+	 * Method to add products
+	 */
+	public void addProducts() {
+		return;
 	}
 
 	/**
-	 * Method to be called for issuing books. Prompts the user for the appropriate
-	 * values and uses the appropriate GroceryStore method for issuing books.
-	 * 
+	 * Method to display product info.  Prompts user for product name and
+	 * displays product id, price, and stock in hand.
 	 */
-	public void issueBooks() {
-		Request.instance().setMemberId(getToken("Enter member id"));
-		Result result = groceryStore.searchMembership(Request.instance());
-		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-			System.out.println("No member with id " + Request.instance().getMemberId());
-			return;
-		}
-		do {
-			Request.instance().setBookId(getToken("Enter book id"));
-			result = groceryStore.issueBook(Request.instance());
-			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Book " + result.getBookTitle() + " issued to " + result.getMemberName()
-						+ " is due on " + result.getBookDueDate());
-			} else {
-				System.out.println("Book could not be issued");
-			}
-		} while (yesOrNo("Issue more books?"));
+	public void retrieveProductInfo() {
+		return;
 	}
-
-
+	
+	public void processShipment() {
+		return;
+	}
+	
 	/**
-	 * Method to be called for processing books. Prompts the user for the
-	 * appropriate values and uses the appropriate GroceryStore method for processing
-	 * books.
-	 * 
+	 * Method to check out a member's cart. Prompts the user to enter the product id
+	 * and quantity for each item. Method finds and displays the name of each item, the
+	 * number of units, the unit price, and the total price for each item.  Also calculates
+	 * and displays the total price for all items combined.  Reorder's product if needed.
+	 * Generates a transaction for the purchase.
 	 */
-	public void processHolds() {
-		do {
-			Request.instance().setBookId(getToken("Enter book id"));
-			Result result = groceryStore.processHold(Request.instance());
-			if (result.getResultCode() == Result.OPERATION_COMPLETED) {
-				System.out.println("Book " + result.getBookTitle() + " should be issued to " + result.getMemberName()
-						+ " phone " + result.getMemberPhone());
-			} else if (result.getResultCode() == Result.BOOK_ISSUED) {
-				System.out.println("This book " + result.getBookTitle() + " is still issued");
-			} else {
-				System.out.println("No valid holds left");
-			}
-			if (!yesOrNo("Process more books?")) {
-				break;
-			}
-		} while (true);
+	public void checkOut() {
+		return;
 	}
 
 	/**
@@ -347,7 +322,7 @@ public class UserInterface {
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
-			System.out.println(transaction.getTransactionDate() + "   " + transaction.getPaid() + "\n");
+			System.out.println(transaction.getTransactionDate() + "   " + transaction.getMemberFee() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
 	}
@@ -439,33 +414,30 @@ public class UserInterface {
 			case ADD_MEMBER:
 				addMember();
 				break;
-//			case ADD_BOOKS:
-//				addBooks();
-//				break;
-//			case ISSUE_BOOKS:
-//				issueBooks();
-//				break;
-//			case RETURN_BOOKS:
-//				returnBooks();
-//				break;
-//			case REMOVE_BOOKS:
-//				removeBooks();
-//				break;
-//			case RENEW_BOOKS:
-//				renewBooks();
-//				break;
-//			case PLACE_HOLD:
-//				placeHold();
-//				break;
-//			case REMOVE_HOLD:
-//				removeHold();
-//				break;
-//			case PROCESS_HOLD:
-//				processHolds();
-//				break;
-//			case GET_TRANSACTIONS:
-//				getTransactions();
-//				break;
+			case REMOVE_MEMBER:
+				removeMember();
+				break;
+			case RETRIEVE_MEMBER_INFO:
+				retrieveMemberInfo();
+				break;
+			case ADD_PRODUCTS:
+				addProducts();
+				break;
+			case CHECK_OUT:
+				checkOut();
+				break;
+			case RETRIEVE_PRODUCT_INFO:
+				retrieveProductInfo();
+				break;
+			case PROCESS_SHIPMENT:
+				processShipment();
+				break;
+			case CHANGE_PRICE:
+				changePrice();
+				break;
+			case PRINT_TRANSACTIONS:
+				getTransactions();
+				break;
 			case LIST_MEMBERS:
 				getMembers();
 				break;
@@ -477,6 +449,9 @@ public class UserInterface {
 				break;
 			case SAVE:
 				save();
+				break;
+			case RETRIEVE:
+				retrieve();
 				break;
 			case HELP:
 				help();
