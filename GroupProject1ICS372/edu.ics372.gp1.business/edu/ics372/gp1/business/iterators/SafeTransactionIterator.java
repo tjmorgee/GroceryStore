@@ -54,7 +54,7 @@ public class SafeTransactionIterator implements Iterator<Result> {
 	@Override
 	public Result next() {
 		if (iterator.hasNext()) {
-			result.setTransacionFields(iterator.next());
+			result.setTransactionFields(iterator.next());
 		} else {
 			throw new NoSuchElementException("No such element");
 		}
