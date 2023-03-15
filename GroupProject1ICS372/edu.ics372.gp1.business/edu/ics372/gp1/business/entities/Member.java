@@ -33,7 +33,7 @@ import edu.ics372.gp1.business.iterators.FilteredIterator;
 import edu.ics372.gp1.business.iterators.SafeTransactionIterator;
 
 /**
- * Member represents a member of the library.
+ * Member represents a member of the GroceryStore.
  * 
  * @author Brahma Dathan and Sarnath Ramnath
  *
@@ -44,9 +44,10 @@ public class Member implements Serializable {
 	private String address;
 	private String phone;
 	private String id;
+	private String dateJoined;
 	private double fee;
 	private static final String MEMBER_STRING = "M";
-	private List<Product> productsBorrowed = new LinkedList<Product>();
+//	private List<Product> productsBorrowed = new LinkedList<Product>();
 	private List<Transaction> transactions = new LinkedList<Transaction>();
 	private static int idCounter;
 
@@ -56,12 +57,14 @@ public class Member implements Serializable {
 	 * @param name    name of the member
 	 * @param address address of the member
 	 * @param phone   phone number of the member
+	 * @param dateJoined date that member joined the GroceryStore
 	 * @param fee	  fee paid by member when joining
 	 */
-	public Member(String name, String address, String phone, double fee) {
+	public Member(String name, String address, String phone, String dateJoined, double fee) {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+		this.dateJoined = dateJoined;
 		this.fee = fee;
 		id = MEMBER_STRING + ++idCounter;
 	}
@@ -87,9 +90,9 @@ public class Member implements Serializable {
 	 * 
 	 * @return Iterator to the collection of issued products
 	 */
-	public Iterator<Product> getProductsIssued() {
-		return productsBorrowed.iterator();
-	}
+//	public Iterator<Product> getProductsIssued() {
+//		return productsBorrowed.iterator();
+//	}
 
 	/**
 	 * Gets an iterator to a collection of selected transactions
@@ -146,6 +149,16 @@ public class Member implements Serializable {
 	public String getId() {
 		return id;
 	}
+	
+	/**
+	 * Getter for dateJoined
+	 * 
+	 * @return date joined
+	 */
+	public String getDateJoined() {
+		return dateJoined;
+	}
+	
 	/**
 	  * Getter for fee
 	  * 
@@ -180,6 +193,24 @@ public class Member implements Serializable {
 	 */
 	public void setPhone(String newPhone) {
 		phone = newPhone;
+	}
+	
+	/**
+	 * Setter for fee
+	 * 
+	 * @param fee	member registration fee
+	 */
+	public void setFee(double newFee) {
+		fee = newFee;
+	}
+	
+	/**
+	 * Setter for date joined
+	 * 
+	 * @param newDateJoined	date member joined
+	 */
+	public void setDateJoined(String newDateJoined) {
+		dateJoined = newDateJoined;
 	}
 	
 

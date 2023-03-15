@@ -45,6 +45,7 @@ public abstract class DataTransfer {
 	private String memberName;
 	private String memberAddress;
 	private String memberPhone;
+	private String memberDateJoined;
 	private double memberFee;
 	private double transactionAmount;
 	private String transactionDate;
@@ -127,6 +128,14 @@ public abstract class DataTransfer {
 	public void setMemberPhone(String memberPhone) {
 		this.memberPhone = memberPhone;
 	}
+	
+	public String getMemberDateJoined() {
+		return memberDateJoined;
+	}
+	
+	public void setMemberDateJoined(String memberDateJoined) {
+		this.memberDateJoined = memberDateJoined;
+	}
 
 	public double getMemberFee() {
 		return memberFee;
@@ -146,6 +155,7 @@ public abstract class DataTransfer {
 		memberName = member.getName();
 		memberPhone = member.getPhone();
 		memberAddress = member.getAddress();
+		memberDateJoined = member.getDateJoined();
 		memberFee = member.getFee();
 	}
 

@@ -99,11 +99,14 @@ public class GroceryStore implements Serializable {
 	 * @param name    member name
 	 * @param address member address
 	 * @param phone   member phone
+	 * @param dateJoined member date joined
+	 * @param fee	member fee
 	 * @return the Member object created
 	 */
 	public Result addMember(Request request) {
 		Result result = new Result();
-		Member member = new Member(request.getMemberName(), request.getMemberAddress(), request.getMemberPhone(), request.getMemberFee());
+		Member member = new Member(request.getMemberName(), request.getMemberAddress(),
+				request.getMemberPhone(), request.getMemberDateJoined(), request.getMemberFee());
 		if (members.addMember(member)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setMemberFields(member);
@@ -111,6 +114,17 @@ public class GroceryStore implements Serializable {
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
+	}
+	
+	public Result removeMember(Request request) {
+		Result result = new Result();
+		if (members.removeMember(request.getMemberId())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			return result;
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+			return result;
+		}
 	}
 	
 	/**
