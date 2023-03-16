@@ -26,23 +26,23 @@ public class Product implements Serializable {
 	}
 	
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public String getId() {
-		return this.id;
+		return id;
 	}
 	
 	public double getPrice() {
-		return this.price;
+		return price;
 	}
 	
 	public int getReorderLevel() {
-		return this.reorderLevel;
+		return reorderLevel;
 	}
 	
 	public int getStock() {
-		return this.stock;
+		return stock;
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class Product implements Serializable {
 	 * @param quantity of product ordered
 	 */
 	public void updateStock(int newStock) {
-		this.stock += newStock;
+		stock += newStock;
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class Product implements Serializable {
 	 * 
 	 * @param new price
 	 */
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPrice(double newPrice) {
+		price = newPrice;
 	}
 }

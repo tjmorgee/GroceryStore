@@ -358,10 +358,10 @@ public class UserInterface {
 	 */
 	public void retrieveProductInfo() {
 		Request.instance().setProductName(getToken("Enter product name"));
-		Result result = groceryStore.retrieveProductInfo(Request.instance().getProductName());
+		Result result = groceryStore.retrieveProductInfo(Request.instance());
 		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
 			System.out.println("(Product id, price, stock)");
-			System.out.println(result.getProductId() + " " + result.getProductPrice() + " " + result.getProductStock());
+			System.out.println(result.getProductId() + ", " + result.getProductPrice() + ", " + result.getProductStock());
 		} else {
 			System.out.println("Product not found within catalog");
 		}
@@ -374,18 +374,16 @@ public class UserInterface {
 	 * 
 	 */
 	public void processShipment() {
-		boolean keepGoing;
 		do {
 			Request.instance().setProductId(getToken("Enter product id"));
-			Result result = groceryStore.changePrice(Request.instance());
+			Result result = groceryStore.processShipment(Request.instance());
 			if(result.getResultCode() == Result.OPERATION_COMPLETED) {
 				System.out.println("(Product id, name, updated stock)");
-				System.out.println(result.getProductId() + " " + result.getProductName() + " " + result.getProductStock());
+				System.out.println(result.getProductId() + ", " + result.getProductName() + ", " + result.getProductStock());
 			} else {
 				System.out.println("Order not found within system");
 			}
-			keepGoing = yesOrNo("Process another shipment?");
-		} while (keepGoing);
+		} while (yesOrNo("Process another shipment?"));
 	}
 
 	/**

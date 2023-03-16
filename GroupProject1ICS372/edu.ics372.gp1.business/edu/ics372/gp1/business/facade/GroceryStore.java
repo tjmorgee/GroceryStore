@@ -95,7 +95,7 @@ public class GroceryStore implements Serializable {
 			}
 		}
 		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
-		catalog.insertProduct(product);
+		orders.addOrder(catalog.insertProduct(product));
 		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
@@ -178,17 +178,15 @@ public class GroceryStore implements Serializable {
 	 * @param name of product
 	 * @return the Product object created
 	 */
-	public Result retrieveProductInfo(String name) {
+	public Result retrieveProductInfo(Request request) {
 		Result result = new Result();
-		for(Iterator<Product> iterator = catalog.iterator(); iterator.hasNext();) {
-			Product product = (Product) iterator.next();
-			if(product.getName().equals(name)) {
-				result.setResultCode(Result.OPERATION_COMPLETED);
-				result.setProductFields(product);
-				return result;
-			}
+		Product product = catalog.retrieveInfo(request.getProductName());
+		if (product != null) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 	
@@ -210,11 +208,11 @@ public class GroceryStore implements Serializable {
 	 */
 	public Result processShipment(Request request) {
 		Result result = new Result();
-		Order temp = orders.search(request.getProductId());
-		if (temp != null) {
-			Product product = catalog.search(temp.getProductId());
-			product.updateStock(temp.getQuantityOrdered());
-			orders.removeOrder(temp);
+		Order order = orders.search(request.getProductId());
+		if (order != null) {
+			Product product = catalog.search(order.getProductId());
+			product.updateStock(order.getQuantityOrdered());
+			orders.removeOrder(order);
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(product);
 			return result;
@@ -250,17 +248,17 @@ public class GroceryStore implements Serializable {
 	 * @param product id, name, quantity ordered
 	 * @return result code signaling pass/fail
 	 */
-	public Result createOrder(Request request) {
-		Result result = new Result();
-		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
-		if (orders.search(order.getProductId()).equals(order)) {
-			result.setResultCode(Result.OPERATION_FAILED);
-			return result;
-		}
-		orders.addOrder(order);
-		result.setResultCode(Result.OPERATION_COMPLETED);
-		return result;
-	}
+//	public Result createOrder(Request request) {
+//		Result result = new Result();
+//		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
+//		if (orders.search(order.getProductId()).equals(order)) {
+//			result.setResultCode(Result.OPERATION_FAILED);
+//			return result;
+//		}
+//		orders.addOrder(order);
+//		result.setResultCode(Result.OPERATION_COMPLETED);
+//		return result;
+//	}
 
 	/**
 	 * Searches for a given member
