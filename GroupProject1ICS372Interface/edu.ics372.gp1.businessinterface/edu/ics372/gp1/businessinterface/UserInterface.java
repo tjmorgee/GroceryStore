@@ -236,7 +236,8 @@ public class UserInterface {
 		Request.instance().setMemberName(getName("Enter member name"));
 		Request.instance().setMemberAddress(getName("Enter address"));
 		Request.instance().setMemberPhone(getName("Enter phone"));
-		//TODO:  ADD SOMETHING TO INCLUDE FEE
+		Request.instance().setMemberDateJoined(getName("Enter date joined (mm/dd/yyyy)"));
+		Request.instance().setMemberFee(Double.parseDouble(getToken("Enter fee")));
 		Result result = groceryStore.addMember(Request.instance());
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("Could not add member");
@@ -250,7 +251,13 @@ public class UserInterface {
 	 * values and uses the appropriate method for removing a member
 	 */
 	public void removeMember() {
-		return;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = groceryStore.removeMember(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("Could not remove member");
+		} else {
+			System.out.println("Member has been removed");
+		}
 	}
 	
 	/**
@@ -259,7 +266,21 @@ public class UserInterface {
 	 * same name, print all such members.
 	 */
 	public void retrieveMemberInfo() {
-		return;
+		Request.instance().setMemberName(getToken("Enter member name"));
+		Result result = groceryStore.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No such member");
+		} else {
+			System.out.println("Member name " + result.getMemberName() + " (address, fee, id)");
+			Iterator<Result> iterator = groceryStore.getMembers();
+			while (iterator.hasNext()) {
+				Result temp = iterator.next();
+				if (result.getMemberName().equalsIgnoreCase(temp.getMemberName())) {
+					System.out.println(temp.getMemberAddress() + ", " + temp.getMemberFee() + ", "
+							+ temp.getMemberId());
+				}
+			}
+		}
 	}
 	/**
 	 * Method to add products
@@ -276,6 +297,31 @@ public class UserInterface {
 	 * Generates a transaction for the purchase.
 	 */
 	public void checkOut() {
+		double total = 0.0;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = groceryStore.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = groceryStore.retrieveProductRequest(Request.instance());
+			if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+				displayResultCode(result.getResultCode());
+			} else {
+				Request.instance().setProductName(result.getProductName());
+				Request.instance().setProductPrice(result.getProductPrice());
+				Request.instance().setQuantityPurchased(getNumber("Enter the quantity."));
+			}
+			result = groceryStore.addLineItem(Request.instance());
+			if (result.getResultCode() == Result.ORDER_PLACED) {
+				System.out.printf("Order for %s will be placed.\n", result.getProductName());
+			} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+				displayResultCode(result.getResultCode());
+			}
+		} while (yesOrNo("Check out more items?"));
 		return;
 	}
 	
@@ -324,7 +370,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void changePrice() {
-		Request.instance().setProductId(getToken("Enter product id"));
+		Request.instance().setProductId(getName("Enter product id"));
 		Request.instance().setProductPrice(Double.parseDouble(getToken("Enter new price of product")));
 		Result result = groceryStore.changePrice(Request.instance());
 		if(result.getResultCode() == Result.OPERATION_COMPLETED) {
@@ -343,7 +389,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void getTransactions() {
-		Request.instance().setMemberId(getToken("Enter member id"));
+		Request.instance().setMemberId(getName("Enter member id"));
 		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
@@ -361,7 +407,7 @@ public class UserInterface {
 		System.out.println("List of members (name, id, address)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getMemberName() + " " + result.getMemberId() + " " + result.getMemberAddress());
+			System.out.println(result.getMemberName() + ", " + result.getMemberId() + ", " + result.getMemberAddress());
 		}
 		System.out.println("End of listing");
 	}
@@ -374,7 +420,7 @@ public class UserInterface {
 		System.out.println("List of products (name, id, price, reorder level)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getProductPrice() + " "
+			System.out.println(result.getProductName() + ", " + result.getProductId() + ", " + result.getProductPrice() + ", "
 					+ result.getProductReorderLevel());
 		}
 		System.out.println("End of listing");
@@ -388,7 +434,7 @@ public class UserInterface {
 		System.out.println("List of outstanding orders (product name, product id, quantity ordered)");
 		while (iterator.hasNext()) {
 			Result result = iterator.next();
-			System.out.println(result.getProductName() + " " + result.getProductId() + " " + result.getQuantityOrdered());
+			System.out.println(result.getProductName() + ", " + result.getProductId() + ", " + result.getQuantityOrdered());
 		}
 		System.out.println("End of listing");
 	}
@@ -425,6 +471,36 @@ public class UserInterface {
 		} catch (Exception cnfe) {
 			cnfe.printStackTrace();
 		}
+	}
+
+	/**
+	 * Method to display info about a result code.
+	 * @param resultCode  The result code to display the message for.
+	 */
+	private void displayResultCode(int resultCode) {
+		String message = "";
+		switch(resultCode) {
+		case Result.OPERATION_COMPLETED:
+			message = "Operation Completed.";
+			break;
+		case Result.OPERATION_FAILED:
+			message = "Operation Failed.";
+			break;
+		case Result.PRODUCT_NOT_FOUND:
+			message = "Product not found.";
+			break;
+		case Result.ORDER_PLACED:
+			message = "Order placed.";
+			break;
+		case Result.NO_ORDER_FOUND:
+			message = "No order found.";
+			break;
+		case Result.NO_SUCH_MEMBER:
+			message = "No such member.";
+			break;
+		}
+	
+		System.out.println(message);
 	}
 
 	/**

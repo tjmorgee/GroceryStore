@@ -33,9 +33,11 @@ import java.util.LinkedList;
 import edu.ics372.gp1.business.collections.Catalog;
 import edu.ics372.gp1.business.collections.MemberList;
 import edu.ics372.gp1.business.collections.OutstandingOrderList;
+import edu.ics372.gp1.business.collections.Cart;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
+import edu.ics372.gp1.business.entities.LineItem;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
 import edu.ics372.gp1.business.iterators.SafeOrderIterator;
@@ -51,6 +53,7 @@ public class GroceryStore implements Serializable {
 	private Catalog catalog = Catalog.getInstance();
 	private MemberList members = MemberList.getInstance();
 	private OutstandingOrderList orders = OutstandingOrderList.getInstance();
+	private Cart cart = Cart.getInstance();
 	private static GroceryStore groceryStore;
 
 	/**
@@ -92,18 +95,59 @@ public class GroceryStore implements Serializable {
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
-
+/**
+ * Adds a line item to a customer's purchase
+ * @param request
+ * @return
+ */
+	public Result addLineItem(Request request) {
+		Result result = new Result();
+		Product product = catalog.search(request.getProductId());
+		LineItem lineItem = new LineItem(request.getProductName(), request.getProductPrice(), request.getQuantityPurchased());
+		if (cart.addLineItem(lineItem)) {
+			result = decreaseStock(request.getProductId(), request.getQuantityPurchased());
+			result.setLineItemFields(lineItem);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	/**
+	 * Method to decrease stock level when a purchase is made.  If stock is decreased below
+	 * reorder level and an existing order for the product does not exist, an order is placed
+	 * for the product for twice the reorder level.
+	 * 
+	 * @param productId  The id of the product
+	 * @param quantity  The quantity to remove
+	 * @return  Result
+	 */
+	private Result decreaseStock(String productId, int quantity) {
+		Result result = new Result();
+		Product product = catalog.search(productId);
+		product.updateStock(-quantity);
+		if (product.getStock() <= product.getReorderLevel() && orders.search(productId) == null) {
+			Order order = new Order(productId, product.getName(), product.getReorderLevel() * 2);
+			orders.addOrder(order);
+			result.setResultCode(Result.ORDER_PLACED);
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		}
+		return result;
+	}
 	/**
 	 * Organizes the operations for adding a member
 	 * 
 	 * @param name    member name
 	 * @param address member address
 	 * @param phone   member phone
+	 * @param dateJoined member date joined
+	 * @param fee	member fee
 	 * @return the Member object created
 	 */
 	public Result addMember(Request request) {
 		Result result = new Result();
-		Member member = new Member(request.getMemberName(), request.getMemberAddress(), request.getMemberPhone(), request.getMemberFee());
+		Member member = new Member(request.getMemberName(), request.getMemberAddress(),
+				request.getMemberPhone(), request.getMemberDateJoined(), request.getMemberFee());
 		if (members.addMember(member)) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setMemberFields(member);
@@ -111,6 +155,17 @@ public class GroceryStore implements Serializable {
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
+	}
+	
+	public Result removeMember(Request request) {
+		Result result = new Result();
+		if (members.removeMember(request.getMemberId())) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			return result;
+		} else {
+			result.setResultCode(Result.OPERATION_FAILED);
+			return result;
+		}
 	}
 	
 	/**
@@ -130,6 +185,16 @@ public class GroceryStore implements Serializable {
 			}
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	
+	public Result retrieveProductRequest(Request request) {
+		Result result = new Result();
+		Product product = catalog.search(request.getProductId());
+		if (product != null)
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		else
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		return result;
 	}
 	

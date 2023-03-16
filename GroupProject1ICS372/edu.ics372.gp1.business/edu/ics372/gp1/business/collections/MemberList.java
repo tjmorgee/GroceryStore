@@ -23,7 +23,12 @@ public class MemberList implements Iterable<Member>, Serializable {
 		return memberList;
 	}
 	
-	// testing method
+	/**
+	 * Helper method for adding members to the list
+	 * 
+	 * @param member member to be added
+	 * @return true
+	 */
 	public boolean addMember(Member member) {
 		members.add(member);
 		return true;
@@ -42,14 +47,14 @@ public class MemberList implements Iterable<Member>, Serializable {
 	}
 	
 	// Business Process 3
-	public void retrieveMember(String name) {
-		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
-			Member member = iterator.next();
-			if (member.getName().equals(name)) {
-				System.out.println("Member [Address: " + member.getAddress() + ", Fee Paid: " + member.getFee() + ", Id: " + member.getId() + "]");
-			}
-		}
-	}
+//	public void retrieveMember(String name) {
+//		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
+//			Member member = iterator.next();
+//			if (member.getName().equals(name)) {
+//				System.out.println("Member [Address: " + member.getAddress() + ", Fee Paid: " + member.getFee() + ", Id: " + member.getId() + "]");
+//			}
+//		}
+//	}
 	
 	/**
 	 * Checks whether a member with a given member id exists.
@@ -69,12 +74,12 @@ public class MemberList implements Iterable<Member>, Serializable {
 	}
 	
 	// Business Process 10
-	public void listMembers() {
-		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
-			Member member = iterator.next();
-			System.out.println("Member [Name: " + member.getName() + ", Id: " + member.getId() + ", Address: " + member.getAddress() + "]");
-		}
-	}
+//	public void listMembers() {
+//		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
+//			Member member = iterator.next();
+//			System.out.println("Member [Name: " + member.getName() + ", Id: " + member.getId() + ", Address: " + member.getAddress() + "]");
+//		}
+//	}
 	
 	@Override
 	public Iterator<Member> iterator() {

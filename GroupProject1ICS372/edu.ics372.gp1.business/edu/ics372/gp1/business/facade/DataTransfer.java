@@ -25,6 +25,7 @@ import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Transaction;
+import edu.ics372.gp1.business.entities.LineItem;
 
 /**
  * The DataTransfer class is used to facilitate data transfer between Library
@@ -45,10 +46,13 @@ public abstract class DataTransfer {
 	private String memberName;
 	private String memberAddress;
 	private String memberPhone;
+	private String memberDateJoined;
 	private double memberFee;
 	private double transactionAmount;
 	private String transactionDate;
 	private int quantityOrdered;
+	private int quantityPurchased;
+	private double totalPrice;
 
 	/**
 	 * This sets all fields to "none".
@@ -127,6 +131,14 @@ public abstract class DataTransfer {
 	public void setMemberPhone(String memberPhone) {
 		this.memberPhone = memberPhone;
 	}
+	
+	public String getMemberDateJoined() {
+		return memberDateJoined;
+	}
+	
+	public void setMemberDateJoined(String memberDateJoined) {
+		this.memberDateJoined = memberDateJoined;
+	}
 
 	public double getMemberFee() {
 		return memberFee;
@@ -146,6 +158,7 @@ public abstract class DataTransfer {
 		memberName = member.getName();
 		memberPhone = member.getPhone();
 		memberAddress = member.getAddress();
+		memberDateJoined = member.getDateJoined();
 		memberFee = member.getFee();
 	}
 
@@ -166,6 +179,14 @@ public abstract class DataTransfer {
 
 	public void setQuantityOrdered(int quantityOrdered) {
 		this.quantityOrdered = quantityOrdered;
+	}
+	
+	public int getQuantityPurchased() {
+		return quantityPurchased;
+	}
+	
+	public void setQuantityPurchased(int quantityPurchased) {
+		this.quantityPurchased = quantityPurchased;
 	}
 
 	public void setTransactionFields(Transaction transaction) {
@@ -192,7 +213,13 @@ public abstract class DataTransfer {
 		productName = order.getProductName();
 		quantityOrdered = order.getQuantityOrdered();
 	}
-
+	public void setLineItemFields(LineItem lineItem) {
+		productName = lineItem.getProductName();
+		productPrice = lineItem.getProductPrice();
+		quantityPurchased = lineItem.getQuantity();
+		totalPrice = lineItem.getTotal();
+	}
+	
 	/**
 	 * Sets all String fields to "none"
 	 */
