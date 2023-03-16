@@ -47,7 +47,6 @@ public class Member implements Serializable {
 	private String dateJoined;
 	private double fee;
 	private static final String MEMBER_STRING = "M";
-//	private List<Product> productsBorrowed = new LinkedList<Product>();
 	private List<Transaction> transactions = new LinkedList<Transaction>();
 	private static int idCounter;
 

@@ -324,6 +324,31 @@ public class UserInterface {
 	 * Generates a transaction for the purchase.
 	 */
 	public void checkOut() {
+		double total = 0.0;
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = groceryStore.searchMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+			return;
+		}
+		
+		do {
+			Request.instance().setProductId(getToken("Enter product id"));
+			result = groceryStore.retrieveProductRequest(Request.instance());
+			if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+				displayResultCode(result.getResultCode());
+			} else {
+				Request.instance().setProductName(result.getProductName());
+				Request.instance().setProductPrice(result.getProductPrice());
+				Request.instance().setQuantityPurchased(getNumber("Enter the quantity."));
+			}
+			result = groceryStore.addLineItem(Request.instance());
+			if (result.getResultCode() == Result.ORDER_PLACED) {
+				System.out.printf("Order for %s will be placed.\n", result.getProductName());
+			} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+				displayResultCode(result.getResultCode());
+			}
+		} while (yesOrNo("Check out more items?"));
 		return;
 	}
 	
@@ -473,6 +498,36 @@ public class UserInterface {
 		} catch (Exception cnfe) {
 			cnfe.printStackTrace();
 		}
+	}
+
+	/**
+	 * Method to display info about a result code.
+	 * @param resultCode  The result code to display the message for.
+	 */
+	private void displayResultCode(int resultCode) {
+		String message = "";
+		switch(resultCode) {
+		case Result.OPERATION_COMPLETED:
+			message = "Operation Completed.";
+			break;
+		case Result.OPERATION_FAILED:
+			message = "Operation Failed.";
+			break;
+		case Result.PRODUCT_NOT_FOUND:
+			message = "Product not found.";
+			break;
+		case Result.ORDER_PLACED:
+			message = "Order placed.";
+			break;
+		case Result.NO_ORDER_FOUND:
+			message = "No order found.";
+			break;
+		case Result.NO_SUCH_MEMBER:
+			message = "No such member.";
+			break;
+		}
+	
+		System.out.println(message);
 	}
 
 	/**
