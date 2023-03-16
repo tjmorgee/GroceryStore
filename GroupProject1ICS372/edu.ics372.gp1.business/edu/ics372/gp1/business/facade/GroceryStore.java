@@ -83,13 +83,16 @@ public class GroceryStore implements Serializable {
 	 */
 	public Result addProduct(Request request) {
 		Result result = new Result();
-		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
-		if (catalog.insertProduct(product)) {
-			result.setResultCode(Result.OPERATION_COMPLETED);
-			result.setProductFields(product);
-			return result;
+		for(Iterator<Product> iterator = catalog.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if(product.getName().equalsIgnoreCase(request.getProductName())) {
+				result.setResultCode(Result.OPERATION_FAILED);
+				return result;
+			}
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
+		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
+		catalog.insertProduct(product);
+		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
 

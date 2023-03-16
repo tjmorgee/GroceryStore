@@ -70,11 +70,9 @@ public class Catalog implements Iterable<Product>, Serializable {
 	 * Inserts a product into the collection
 	 * 
 	 * @param product the product to be inserted
-	 * @return true iff the product could be inserted. Currently always true
 	 */
-	public boolean insertProduct(Product product) {
+	public void insertProduct(Product product) {
 		products.add(product);
-		return true;
 	}
 
 	/**

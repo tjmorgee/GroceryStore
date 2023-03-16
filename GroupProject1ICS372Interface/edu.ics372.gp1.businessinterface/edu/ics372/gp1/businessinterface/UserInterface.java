@@ -163,6 +163,25 @@ public class UserInterface {
 			}
 		} while (true);
 	}
+	
+	/**
+	 * Converts the string to a double
+	 * 
+	 * @param prompt the string for prompting
+	 * @return the integer corresponding to the string
+	 * 
+	 */
+	public double getDouble(String prompt) {
+		do {
+			try {
+				String item = getToken(prompt);
+				Double number = Double.valueOf(item);
+				return number.doubleValue();
+			} catch (NumberFormatException nfe) {
+				System.out.println("Please input a number ");
+			}
+		} while (true);
+	}
 
 	/**
 	 * Prompts for a date and gets a date object
@@ -237,7 +256,7 @@ public class UserInterface {
 		Request.instance().setMemberAddress(getName("Enter address"));
 		Request.instance().setMemberPhone(getName("Enter phone"));
 		Request.instance().setMemberDateJoined(getName("Enter date joined (mm/dd/yyyy)"));
-		Request.instance().setMemberFee(Double.parseDouble(getToken("Enter fee")));
+		Request.instance().setMemberFee(getDouble("Enter fee"));
 		Result result = groceryStore.addMember(Request.instance());
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("Could not add member");
@@ -286,7 +305,15 @@ public class UserInterface {
 	 * Method to add products
 	 */
 	public void addProducts() {
-		return;
+		Request.instance().setProductName(getName("Enter product name"));
+		Request.instance().setProductPrice(getDouble("Enter product price"));
+		Request.instance().setProductReorderLevel(getNumber("Enter product reorder level"));
+		Result result = groceryStore.addProduct(Request.instance());
+		if (result.getResultCode() == Result.OPERATION_COMPLETED) {
+			System.out.println("Product added to catalog");
+		} else {
+			System.out.println("Product could not be added to catalog");
+		}
 	}
 
 	/**
@@ -346,7 +373,7 @@ public class UserInterface {
 	 */
 	public void changePrice() {
 		Request.instance().setProductId(getName("Enter product id"));
-		Request.instance().setProductPrice(Double.parseDouble(getToken("Enter new price of product")));
+		Request.instance().setProductPrice(getDouble("Enter new price of product"));
 		Result result = groceryStore.changePrice(Request.instance());
 		if(result.getResultCode() == Result.OPERATION_COMPLETED) {
 			System.out.println("Product name and updated price");
