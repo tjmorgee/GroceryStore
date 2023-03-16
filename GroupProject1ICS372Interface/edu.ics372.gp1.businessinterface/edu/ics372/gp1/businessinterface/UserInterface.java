@@ -33,7 +33,6 @@ import java.util.StringTokenizer;
 import edu.ics372.gp1.business.facade.GroceryStore;
 import edu.ics372.gp1.business.facade.Request;
 import edu.ics372.gp1.business.facade.Result;
-
 /**
  * 
  * This class implements the user interface for the GroceryStore project. The
@@ -59,7 +58,6 @@ public class UserInterface {
 	private static final int LIST_PRODUCTS = 11;
 	private static final int LIST_ORDERS = 12;
 	private static final int SAVE = 13;
-	private static final int RETRIEVE = 14;
 	private static final int HELP = 15;
 
 	/**
@@ -71,6 +69,7 @@ public class UserInterface {
 			retrieve();
 		} else {
 			groceryStore = GroceryStore.instance();
+			groceryStore.test();
 		}
 
 	}
@@ -242,7 +241,6 @@ public class UserInterface {
 		System.out.println(LIST_PRODUCTS + " to list all products");
 		System.out.println(LIST_ORDERS + " to list all outstanding orders");
 		System.out.println(SAVE + " to save data");
-		System.out.println(RETRIEVE + " to retrive data");  //should only work before other commands are issued.
 		System.out.println(HELP + " for help");
 	}
 
@@ -578,9 +576,6 @@ public class UserInterface {
 				break;
 			case SAVE:
 				save();
-				break;
-			case RETRIEVE:
-				retrieve();
 				break;
 			case HELP:
 				help();

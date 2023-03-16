@@ -41,6 +41,7 @@ import edu.ics372.gp1.business.entities.LineItem;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
 import edu.ics372.gp1.business.iterators.SafeOrderIterator;
+import edu.ics372.gp1.business.tests.AutomatedTester;
 
 /**
  * The facade class handling all requests from users.
@@ -333,6 +334,10 @@ public class GroceryStore implements Serializable {
 			ioe.printStackTrace();
 			return false;
 		}
+	}
+	
+	public void test() {
+		AutomatedTester test = new AutomatedTester();
 	}
 
 	/**
