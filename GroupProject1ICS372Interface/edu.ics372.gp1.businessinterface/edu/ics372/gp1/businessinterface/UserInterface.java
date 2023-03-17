@@ -58,7 +58,11 @@ public class UserInterface {
 	private static final int LIST_PRODUCTS = 11;
 	private static final int LIST_ORDERS = 12;
 	private static final int SAVE = 13;
+<<<<<<< HEAD
 	private static final int HELP = 15;
+=======
+	private static final int HELP = 14;
+>>>>>>> refs/remotes/origin/main
 
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved data.
@@ -228,7 +232,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void help() {
-		System.out.println("Enter a number between 0 and 15 as explained below:");
+		System.out.println("Enter a number between 0 and 14 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
 		System.out.println(REMOVE_MEMBER + " to remove member");
@@ -268,6 +272,7 @@ public class UserInterface {
 	/**
 	 * Method to be called for removing a member.  Prompts the user for the appropriate
 	 * values and uses the appropriate method for removing a member
+	 * 
 	 */
 	public void removeMember() {
 		Request.instance().setMemberId(getToken("Enter member id"));
@@ -283,6 +288,7 @@ public class UserInterface {
 	 * Method to display member info. Prompts the user for a member's name and displays
 	 * member's address, fee paid, and id.  If there is more than one member with the 
 	 * same name, print all such members.
+	 * 
 	 */
 	public void retrieveMemberInfo() {
 		Request.instance().setMemberName(getToken("Enter member name"));
@@ -302,7 +308,9 @@ public class UserInterface {
 		}
 	}
 	/**
-	 * Method to add products
+	 * Method to add products to catalog. Prompts the user for name, price, and reorder level.
+	 * The method uses necessary methods within grocery store to add product.
+	 * 
 	 */
 	public void addProducts() {
 		Request.instance().setProductName(getName("Enter product name"));
@@ -322,6 +330,7 @@ public class UserInterface {
 	 * number of units, the unit price, and the total price for each item.  Also calculates
 	 * and displays the total price for all items combined.  Reorder's product if needed.
 	 * Generates a transaction for the purchase.
+	 * 
 	 */
 	public void checkOut() {
 		Request.instance().setMemberId(getToken("Enter member id"));
@@ -421,8 +430,12 @@ public class UserInterface {
 	 */
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
+<<<<<<< HEAD
 		Request.instance().setDate(getDate("Please enter the start date for which you want records as mm/dd/yy"));
 		Request.instance().setEndDate(getDate("Please enter the end date for which you want records as mm/dd/yy"));
+=======
+		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
+>>>>>>> refs/remotes/origin/main
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
