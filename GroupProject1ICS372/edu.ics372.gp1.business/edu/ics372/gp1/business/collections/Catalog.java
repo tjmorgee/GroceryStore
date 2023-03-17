@@ -31,7 +31,7 @@ import edu.ics372.gp1.business.entities.Product;
 /**
  * The collection class for Product objects
  * 
- * @author Brahma Dathan and Sarnath Ramnath
+ * @author Thomas Morgenstern and Jonathan Voss
  *
  */
 public class Catalog implements Iterable<Product>, Serializable {

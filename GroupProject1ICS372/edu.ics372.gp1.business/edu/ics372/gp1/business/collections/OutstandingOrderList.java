@@ -34,7 +34,6 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable {
 	 * Searches outstanding order list for pre-existing order of product.
 	 * 
 	 * @param order to be made.
-	 * 
 	 * @return order if found otherwise null.
 	 */
 	public Order search(String productId) {
@@ -63,6 +62,7 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable {
 	 * Helper method to remove orders from the list from GroceryStore.
 	 * 
 	 * @param order to be removed.
+	 * @return true
 	 */
 	public boolean removeOrder(Order order) {
 		return orderList.remove(order);

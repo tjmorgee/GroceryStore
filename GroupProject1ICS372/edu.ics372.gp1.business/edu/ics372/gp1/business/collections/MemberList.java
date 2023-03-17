@@ -7,6 +7,12 @@ import java.util.List;
 
 import edu.ics372.gp1.business.entities.Member;
 
+/**
+ * Collection class for members within grocery store.
+ * 
+ * @author Thomas Morgenstern
+ *
+ */
 public class MemberList implements Iterable<Member>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Member> members = new LinkedList<Member>();
@@ -34,7 +40,12 @@ public class MemberList implements Iterable<Member>, Serializable {
 		return true;
 	}
 	
-	// Business Process 2
+	/**
+	 * Method for removing members from the list
+	 * 
+	 * @param id	member id to remove
+	 * @return true or false
+	 */
 	public boolean removeMember(String id) {
 		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
 			Member member = iterator.next();
@@ -51,7 +62,6 @@ public class MemberList implements Iterable<Member>, Serializable {
 	 * 
 	 * @param memberName the Name of the member
 	 * @return member if found otherwise null
-	 * 
 	 */
 	public Member search(String memberName) {
 		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
@@ -68,7 +78,6 @@ public class MemberList implements Iterable<Member>, Serializable {
 	 * 
 	 * @param memberId the id of the member
 	 * @return member if found otherwise null
-	 * 
 	 */
 	public Member searchId(String memberId) {
 		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
@@ -80,6 +89,10 @@ public class MemberList implements Iterable<Member>, Serializable {
 		return null;
 	}
 
+	/**
+	 * Returns an iterator to member objects
+	 * 
+	 */
 	@Override
 	public Iterator<Member> iterator() {
 		return members.iterator();
