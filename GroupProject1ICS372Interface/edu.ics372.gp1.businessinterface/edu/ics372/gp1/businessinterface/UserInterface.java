@@ -459,7 +459,7 @@ public class UserInterface {
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
-			System.out.println(transaction.getTransactionDate() + "   " + transaction.getMemberFee() + "\n");
+			System.out.println(transaction.getTransactionDate() + "   " + transaction.getTransactionAmount() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
 	}

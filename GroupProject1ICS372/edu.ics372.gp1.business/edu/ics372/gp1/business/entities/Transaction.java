@@ -20,6 +20,9 @@ package edu.ics372.gp1.business.entities;
  * and are not responsible for any loss or damage resulting from its use.  
  */
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -45,7 +48,7 @@ public class Transaction implements Serializable {
 	 */
 	public Transaction(double paid) {
 		total = paid;
-		date = new GregorianCalendar();
+		date = Calendar.getInstance();
 	}
 
 	/**
@@ -76,7 +79,8 @@ public class Transaction implements Serializable {
 	 * @return date with month, date, and year
 	 */
 	public String getDate() {
-		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+		int month = Calendar.MONTH + 1;
+		return month + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 	
 	public void addItem(double cost) {

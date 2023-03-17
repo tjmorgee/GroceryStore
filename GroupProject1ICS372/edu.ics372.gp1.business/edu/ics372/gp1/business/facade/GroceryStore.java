@@ -145,7 +145,11 @@ public class GroceryStore implements Serializable {
 	public Result addTransaction(Request request) {
 		Result result = new Result();
 		Member member = members.searchId(request.getMemberId());
-		member.addTransaction(request.getTransactionAmount());
+		double total = 0;
+		for(Iterator<LineItem> iterator = cart.iterator(); iterator.hasNext();) {
+			total += cart.removeLineItem().getTotal();
+		}
+		member.addTransaction(total);
 		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
