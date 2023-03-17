@@ -38,7 +38,6 @@ public class Transaction implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private double total;
 	private Calendar date;
-	//private List<Product> cart = new LinkedList<Product>();
 
 	/**
 	 * Creates the transaction with the amount paid. The date is the current date.
@@ -85,11 +84,6 @@ public class Transaction implements Serializable {
 	
 	public Calendar getTransactionDate() {
 		return date;
-	}
-	
-	public void addItem(double cost) {
-		//cart.add(product);
-		total += cost;
 	}
 
 	/**

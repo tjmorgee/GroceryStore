@@ -220,35 +220,6 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
-	public Result addItemToCart(Request request) {
-		Result result = new Result();
-		Product product = catalog.search(request.getProductId());
-		if (product == null) {
-			result.setResultCode(Result.PRODUCT_NOT_FOUND);
-		} else {
-			//cart.addItem(product);
-			//cart.addQuantity(request.getQuantityPurchased());
-			items.add(product);
-			quantities.add(request.getQuantityPurchased());
-			result.setResultCode(Result.OPERATION_COMPLETED);
-		}
-		return result;
-	}
-	
-	public Result checkOut(Request request) {
-		Result result = new Result();
-		Member member = members.searchId(request.getMemberId());
-		double total = 0;
-		for(int item = 0; item < cart.size(); item++) {
-			Product product = items.remove(item);
-			total += product.getPrice() * quantities.remove(item);
-		}	
-		member.addTransaction(total);
-		result.setTransactionAmount(total);
-		result.setResultCode(Result.OPERATION_COMPLETED);
-		return result;
-	}
-	
 	/**
 	 * Processes an outstanding order for the GroceryStore.
 	 * 
@@ -331,32 +302,12 @@ public class GroceryStore implements Serializable {
 	 * @return iterator to the collection
 	 */
 	public Iterator<Result> getTransactions(Request request) {
-		//Result result = new Result();
 		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}
 		return member.getTransactionsOnDate(request.getDate());
 	}
-	
-//	public Result getTransactions(Request request) {
-//		Result result = new Result();
-//		Member member = members.searchId(request.getMemberId());
-//		if (member == null) {
-//			return result;
-//		}
-//		while(member.getTransactions().hasNext()) {
-//			Transaction temp = member.getTransactions().next();
-//			if (temp.getTransactionDate().before(request.getFirstDate()) || 
-//					temp.getTransactionDate().after(request.getSecondDate())) {
-//				// do nothing
-//			} else {
-//				result.addDate(temp.getTransactionDate());
-//				result.addTotal(temp.getTotal());
-//			}
-//		}
-//		return result;
-//	}
 
 	/**
 	 * Retrieves a deserialized version of the groceryStore from disk

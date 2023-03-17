@@ -36,7 +36,6 @@ import edu.ics372.gp1.business.facade.Result;
  */
 public class SafeTransactionIterator implements Iterator<Result> {
 	private FilteredIterator iterator;
-	//private Iterator<Transaction> iterator;
 	private Result result = new Result();
 
 	/**
@@ -47,10 +46,6 @@ public class SafeTransactionIterator implements Iterator<Result> {
 	public SafeTransactionIterator(FilteredIterator iterator) {
 		this.iterator = iterator;
 	}
-	
-//	public SafeTransactionIterator(Iterator<Transaction> iterator) {
-//		this.iterator = iterator;
-//	}
 
 	@Override
 	public boolean hasNext() {

@@ -83,15 +83,6 @@ public class Catalog implements Iterable<Product>, Serializable {
 		}
 		return null;
 	}
-	
-//	public void updateStock(Order order) {
-//		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
-//			Product product = (Product) iterator.next();
-//			if (product.getId().equalsIgnoreCase(order.getProductId())) {
-//				product.updateStock(order.getQuantityOrdered());
-//			}
-//		}
-//	}
 
 	/**
 	 * Inserts a product into the collection
