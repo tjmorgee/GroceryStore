@@ -421,7 +421,8 @@ public class UserInterface {
 	 */
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
-		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
+		Request.instance().setDate(getDate("Please enter the start date for which you want records as mm/dd/yy"));
+		Request.instance().setEndDate(getDate("Please enter the end date for which you want records as mm/dd/yy"));
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
