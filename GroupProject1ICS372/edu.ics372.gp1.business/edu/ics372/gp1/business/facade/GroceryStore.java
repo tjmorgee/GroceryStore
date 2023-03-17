@@ -97,6 +97,7 @@ public class GroceryStore implements Serializable {
 		}
 		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
 		orders.addOrder(catalog.insertProduct(product));
+		result.setProductFields(product);
 		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
