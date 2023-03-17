@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * Product represents a product of the GroceryStore.
+ * Product represents a product of the grocery store.
  * 
  * @author Thomas Morgenstern
  *

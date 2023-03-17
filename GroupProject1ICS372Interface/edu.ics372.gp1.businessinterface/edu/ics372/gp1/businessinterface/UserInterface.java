@@ -322,32 +322,54 @@ public class UserInterface {
 	 * Generates a transaction for the purchase.
 	 */
 	public void checkOut() {
-		double total = 0.0;
 		Request.instance().setMemberId(getToken("Enter member id"));
-		Result result = groceryStore.searchMembership(Request.instance());
+		Result result = groceryStore.checkMembership(Request.instance());
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("No member with id " + Request.instance().getMemberId());
-			return;
+		} else {
+			do {
+				Request.instance().setProductId(getToken("Enter product id"));
+				result = groceryStore.retrieveProductRequest(Request.instance());
+				if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+					displayResultCode(result.getResultCode());
+				} else {
+					Request.instance().setProductName(result.getProductName());
+					Request.instance().setProductPrice(result.getProductPrice());
+					Request.instance().setQuantityPurchased(getNumber("Enter the quantity."));
+				}
+				result = groceryStore.addLineItem(Request.instance());
+				if (result.getResultCode() == Result.ORDER_PLACED) {
+					System.out.printf("Order for %s will be placed.\n", result.getProductName());
+				} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+					displayResultCode(result.getResultCode());
+				}
+			} while (yesOrNo("Check out more items?"));
 		}
-		
-		do {
-			Request.instance().setProductId(getToken("Enter product id"));
-			result = groceryStore.retrieveProductRequest(Request.instance());
-			if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-				displayResultCode(result.getResultCode());
-			} else {
-				Request.instance().setProductName(result.getProductName());
-				Request.instance().setProductPrice(result.getProductPrice());
-				Request.instance().setQuantityPurchased(getNumber("Enter the quantity."));
-			}
-			result = groceryStore.addLineItem(Request.instance());
-			if (result.getResultCode() == Result.ORDER_PLACED) {
-				System.out.printf("Order for %s will be placed.\n", result.getProductName());
-			} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-				displayResultCode(result.getResultCode());
-			}
-		} while (yesOrNo("Check out more items?"));
-		return;
+	}
+	
+	public void checkOut2() {
+		Request.instance().setMemberId(getToken("Enter member id"));
+		Result result = groceryStore.checkMembership(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+			System.out.println("No member with id " + Request.instance().getMemberId());
+		} else {
+			String receipt = "";
+			do {
+				Request.instance().setProductId(getToken("Enter product id"));
+				result = groceryStore.retrieveProductRequest(Request.instance());
+				if (result.getResultCode() != Result.OPERATION_COMPLETED) {
+					displayResultCode(result.getResultCode());
+				} else {
+					Request.instance().setQuantityPurchased(getNumber("Enter quantity"));
+					result = groceryStore.addItemToCart(Request.instance());
+					receipt += result.getProductName() + "\t" + Request.instance().getQuantityPurchased() + "\t$" + result.getProductPrice()
+							+ "\t$" + (result.getProductPrice() * Request.instance().getQuantityPurchased() + "\n");
+				}
+			} while (yesOrNo("Check out more items?"));
+			result = groceryStore.checkOut(Request.instance());
+			receipt += "Total\t\t\t\t\t$" + result.getTransactionAmount() + "\n";
+			System.out.println(receipt);
+		}
 	}
 	
 	/**

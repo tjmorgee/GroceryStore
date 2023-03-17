@@ -22,17 +22,20 @@ package edu.ics372.gp1.business.entities;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a single Transaction (purchase of items)
  * 
- * @author Brahma Dathan
+ * @author Thomas Morgenstern
  *
  */
 public class Transaction implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private double paid;
+	private double total;
 	private Calendar date;
+	//private List<Product> cart = new LinkedList<Product>();
 
 	/**
 	 * Creates the transaction with the amount paid. The date is the current date.
@@ -41,7 +44,7 @@ public class Transaction implements Serializable {
 	 * 
 	 */
 	public Transaction(double paid) {
-		this.paid = paid;
+		total = paid;
 		date = new GregorianCalendar();
 	}
 
@@ -63,8 +66,8 @@ public class Transaction implements Serializable {
 	 * 
 	 * @return paid field
 	 */
-	public double getPaid() {
-		return paid;
+	public double getTotal() {
+		return total;
 	}
 
 	/**
@@ -75,6 +78,11 @@ public class Transaction implements Serializable {
 	public String getDate() {
 		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
+	
+	public void addItem(double cost) {
+		//cart.add(product);
+		total += cost;
+	}
 
 	/**
 	 * String form of the transaction
@@ -82,6 +90,6 @@ public class Transaction implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return (this.getDate() + "   " + paid);
+		return getDate() + "  " + total;
 	}
 }

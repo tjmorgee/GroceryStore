@@ -48,6 +48,7 @@ public class Member implements Serializable {
 	private double fee;
 	private static final String MEMBER_STRING = "M";
 	private List<Transaction> transactions = new LinkedList<Transaction>();
+	//private List<Product> cart = new LinkedList<Product>();
 	private static int idCounter;
 
 	/**
@@ -69,31 +70,6 @@ public class Member implements Serializable {
 	}
 
 	/**
-	 * Stores the product as issued to the member
-	 * 
-	 * @param product the product to be issued
-	 * @return true iff the product could be marked as issued. always true currently
-	 */
-	//Probably delete this, add new method to create transactions though
-//	public boolean issue(Product product) {
-//		if (productsBorrowed.add(product)) {
-//			transactions.add(new Transaction("Issued", product.getName()));
-//			return true;
-//		}
-//		return false;
-//	}
-
-
-	/**
-	 * Gets an iterator to the issued products
-	 * 
-	 * @return Iterator to the collection of issued products
-	 */
-//	public Iterator<Product> getProductsIssued() {
-//		return productsBorrowed.iterator();
-//	}
-
-	/**
 	 * Gets an iterator to a collection of selected transactions
 	 * 
 	 * @param date the date for which the transactions have to be retrieved
@@ -113,6 +89,11 @@ public class Member implements Serializable {
 		return transactions.iterator();
 	}
 
+	public void addTransaction(double total) {
+		Transaction transaction = new Transaction(total);
+		transactions.add(transaction);
+	}
+	
 	/**
 	 * Getter for name
 	 * 

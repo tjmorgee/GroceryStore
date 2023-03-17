@@ -99,6 +99,7 @@ public class GroceryStore implements Serializable {
 		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
+	
 /**
  * Adds a line item to a customer's purchase
  * @param request
@@ -134,6 +135,7 @@ public class GroceryStore implements Serializable {
 			orders.addOrder(order);
 			result.setResultCode(Result.ORDER_PLACED);
 		} else {
+			// Add something in here so you can't purchase a higher quantity than in stock
 			result.setResultCode(Result.OPERATION_COMPLETED);
 		}
 		return result;
@@ -193,10 +195,39 @@ public class GroceryStore implements Serializable {
 	public Result retrieveProductRequest(Request request) {
 		Result result = new Result();
 		Product product = catalog.search(request.getProductId());
-		if (product != null)
+		if (product != null) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
-		else
+			result.setProductFields(product);
+		} else {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+		}
+		return result;
+	}
+	
+	public Result addItemToCart(Request request) {
+		Result result = new Result();
+		Product product = catalog.search(request.getProductId());
+		if (product == null) {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+		} else {
+			cart.addItem(product);
+			cart.addQuantity(request.getQuantityPurchased());
+			result.setResultCode(Result.OPERATION_COMPLETED);
+		}
+		return result;
+	}
+	
+	public Result checkOut(Request request) {
+		Result result = new Result();
+		Member member = members.searchId(request.getMemberId());
+		double total = 0;
+		for(int item = 0; item < cart.size(); item++) {
+			Product product = cart.removeItem(item);
+			total += product.getPrice() * cart.getQuantity(item);
+		}	
+		member.addTransaction(total);
+		result.setTransactionAmount(total);
+		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
 	
@@ -226,7 +257,8 @@ public class GroceryStore implements Serializable {
 	/**
 	 * Method for changing the price of a product
 	 * 
-	 * @param product id, product new price
+	 * @param id	product id
+	 * @param price	product new price
 	 * @return product name, updated price if product found
 	 */
 	public Result changePrice(Request request) {
@@ -241,34 +273,28 @@ public class GroceryStore implements Serializable {
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
-	
-	/**
-	 * Method for creating orders of a product.
-	 * 
-	 * @param product id, name, quantity ordered
-	 * @return result code signaling pass/fail
-	 */
-//	public Result createOrder(Request request) {
-//		Result result = new Result();
-//		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
-//		if (orders.search(order.getProductId()).equals(order)) {
-//			result.setResultCode(Result.OPERATION_FAILED);
-//			return result;
-//		}
-//		orders.addOrder(order);
-//		result.setResultCode(Result.OPERATION_COMPLETED);
-//		return result;
-//	}
 
 	/**
-	 * Searches for a given member
+	 * Searches for a given member by their name
 	 * 
-	 * @param memberName  of the member
-	 * @return true iff the member is in the member list collection
+	 * @param member name of the member
+	 * @return member and true if found
 	 */
 	public Result searchMembership(Request request) {
 		Result result = new Result();
 		Member member = members.search(request.getMemberName());
+		if (member == null) {
+			result.setResultCode(Result.NO_SUCH_MEMBER);
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(member);
+		}
+		return result;
+	}
+	
+	public Result checkMembership(Request request) {
+		Result result = new Result();
+		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			result.setResultCode(Result.NO_SUCH_MEMBER);
 		} else {
