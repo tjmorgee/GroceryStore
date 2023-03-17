@@ -130,16 +130,22 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_FAILED;
 	}
 	
-	// Price not being stored properly, other than that it's working
+	// Works great
 	public void testCheckOut() {
 		Request.instance().reset();
 		Result result;
+		double total = 0;
 		Request.instance().setProductId("P25");
+		Request.instance().setQuantityPurchased(4);
 		result = groceryStore.addLineItem(Request.instance());
+		total += result.getProductPrice() * result.getQuantityPurchased();
 		Request.instance().setProductId("P27");
+		Request.instance().setQuantityPurchased(2);
 		result = groceryStore.addLineItem(Request.instance());
+		total += result.getProductPrice() * result.getQuantityPurchased();
 		Request.instance().reset();
 		Request.instance().setMemberId("M6");
+		Request.instance().setTransactionAmount(total);
 		result = groceryStore.addTransaction(Request.instance());
 		assert result.getResultCode() == Result.OPERATION_COMPLETED;
 	}
