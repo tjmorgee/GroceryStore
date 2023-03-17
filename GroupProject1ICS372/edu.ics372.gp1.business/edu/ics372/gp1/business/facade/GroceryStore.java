@@ -25,23 +25,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import edu.ics372.gp1.business.collections.Catalog;
 import edu.ics372.gp1.business.collections.MemberList;
 import edu.ics372.gp1.business.collections.OutstandingOrderList;
 import edu.ics372.gp1.business.collections.Cart;
 import edu.ics372.gp1.business.entities.Product;
-import edu.ics372.gp1.business.entities.Transaction;
 import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.LineItem;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
-import edu.ics372.gp1.business.iterators.FilteredIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
 import edu.ics372.gp1.business.iterators.SafeOrderIterator;
 import edu.ics372.gp1.business.tests.AutomatedTester;
@@ -49,7 +44,7 @@ import edu.ics372.gp1.business.tests.AutomatedTester;
 /**
  * The facade class handling all requests from users.
  * 
- * @author Brahma Dathan
+ * @author Thomas Morgenstern and Jonathan Voss
  *
  */
 public class GroceryStore implements Serializable {
@@ -61,10 +56,11 @@ public class GroceryStore implements Serializable {
 	private static GroceryStore groceryStore;
 
 	/**
-	 * Private for the singleton pattern Creates the catalog and member collection
-	 * objects
+	 * Private for the singleton pattern Creates the catalog, member collection,
+	 * order collection, and cart collection objects
 	 */
 	private GroceryStore() {
+		
 	}
 
 	/**
@@ -84,7 +80,7 @@ public class GroceryStore implements Serializable {
 	 * Organizes the operations for adding a product
 	 * 
 	 * @param name  product name
-	 * @param author author name
+	 * @param price	product price
 	 * @param reorderLevel     product reorderLevel
 	 * @return the Product object created
 	 */
@@ -106,8 +102,10 @@ public class GroceryStore implements Serializable {
 	
 /**
  * Adds a line item to a customer's purchase
- * @param request
- * @return
+ * 
+ * @param id	product id
+ * @param quantity	product quantity
+ * @return lineItem
  */
 	public Result addLineItem(Request request) {
 		Result result = new Result();
@@ -121,6 +119,7 @@ public class GroceryStore implements Serializable {
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
+	
 	/**
 	 * Method to decrease stock level when a purchase is made.  If stock is decreased below
 	 * reorder level and an existing order for the product does not exist, an order is placed
@@ -145,6 +144,12 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
+	/**
+	 * Method to add transaction to member's transaction list
+	 * 
+	 * @param id	member id
+	 * @return result
+	 */
 	public Result addTransaction(Request request) {
 		Result result = new Result();
 		Member member = members.searchId(request.getMemberId());
@@ -180,6 +185,12 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
+	/**
+	 * Organizes the operations for removing a member
+	 * 
+	 * @param id	member id
+	 * @return result
+	 */
 	public Result removeMember(Request request) {
 		Result result = new Result();
 		if (members.removeMember(request.getMemberId())) {
@@ -209,6 +220,12 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
+	/**
+	 * Method for retrieving a product given its id
+	 * 
+	 * @param id	product id
+	 * @return result
+	 */
 	public Result retrieveProductRequest(Request request) {
 		Result result = new Result();
 		Product product = catalog.search(request.getProductId());
@@ -249,7 +266,8 @@ public class GroceryStore implements Serializable {
 	 * 
 	 * @param id	product id
 	 * @param price	product new price
-	 * @return product name, updated price if product found
+	 * @return product name
+	 * @return updated price if product found
 	 */
 	public Result changePrice(Request request) {
 		Result result = new Result();
@@ -282,6 +300,12 @@ public class GroceryStore implements Serializable {
 		return result;
 	}
 	
+	/**
+	 * Method to check that a given member exists
+	 * 
+	 * @param id	member id
+	 * @return result
+	 */
 	public Result checkMembership(Request request) {
 		Result result = new Result();
 		Member member = members.searchId(request.getMemberId());
@@ -352,6 +376,10 @@ public class GroceryStore implements Serializable {
 		}
 	}
 	
+	/**
+	 * AutomatedTester helper method
+	 * 
+	 */
 	public void test() {
 		AutomatedTester test = new AutomatedTester();
 	}
