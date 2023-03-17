@@ -432,7 +432,11 @@ public class UserInterface {
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
-			System.out.println(transaction.getTransactionDate() + "   " + transaction.getTransactionAmount() + "\n");
+			Calendar date = transaction.getTransactionDate();
+			String dateString = (date.get(Calendar.MONTH) + 1) //java stores january as 0 in calendar
+					+ "/" +  date.get(Calendar.DAY_OF_MONTH)
+					+ "/" + date.get(Calendar.YEAR);
+			System.out.println(dateString + "   " + transaction.getTransactionAmount() + "\n");
 		}
 		System.out.println("\n End of transactions \n");
 	}
