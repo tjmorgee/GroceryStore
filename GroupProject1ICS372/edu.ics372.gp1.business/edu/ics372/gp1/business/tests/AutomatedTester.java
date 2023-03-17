@@ -80,11 +80,28 @@ public class AutomatedTester {
 	
 	private void testAddProducts() {
 		Result result;
+		for (int i = 0; i < TESTS - 1; ++i) {  //substitute something for i later
+			Request.instance().reset();
+			Request.instance().setProductName(names[i]);
+			Request.instance().setProductPrice(prices[i]);
+			Request.instance().setProductReorderLevel(reorderLevels[i]);
+			result = groceryStore.addProduct(Request.instance());
+			if (i < TESTS - 1) {  //last name is same as first and should fail
+				assert result.getResultCode() == Result.OPERATION_COMPLETED;
+			} else {
+				assert result.getResultCode() == Result.OPERATION_FAILED;
+			}
+			assert result.getProductName() ==names[i];
+			assert result.getProductPrice() == prices[i];
+			assert result.getProductReorderLevel() == reorderLevels[i];
+			assert result.getProductStock() == 0;
+		}
 	}
 	
 	public void test() {
 		testAddMember();
 		testRemoveMember();
 		testRetrieveMember();
+		testAddProducts();
 	}
 }
