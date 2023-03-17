@@ -25,7 +25,7 @@ import java.util.Calendar;
 /**
  * Represents a single Transaction (purchase of items)
  * 
- * @author Thomas Morgenstern
+ * @author Thomas Morgenstern and Jonathan Voss
  *
  */
 public class Transaction implements Serializable {
@@ -56,6 +56,13 @@ public class Transaction implements Serializable {
 				&& (date.get(Calendar.DATE) == this.date.get(Calendar.DATE)));
 	}
 	
+	/**
+	 * Checks whether this transaction is between two dates
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return true or false
+	 */
 	public boolean betweenDates(Calendar date1, Calendar date2) {
 		date2.add(Calendar.DAY_OF_YEAR, 1);
 		return (this.date.after(date1) && this.date.before(date2));
@@ -81,6 +88,11 @@ public class Transaction implements Serializable {
 		return month + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 	
+	/**
+	 * Returns the date of transaction
+	 * 
+	 * @return date
+	 */
 	public Calendar getTransactionDate() {
 		return date;
 	}
