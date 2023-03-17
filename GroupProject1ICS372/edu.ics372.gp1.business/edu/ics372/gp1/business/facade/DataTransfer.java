@@ -26,6 +26,8 @@ import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Transaction;
 
+import java.util.Calendar;
+
 import edu.ics372.gp1.business.entities.LineItem;
 
 /**
@@ -47,7 +49,7 @@ public abstract class DataTransfer {
 	private String memberName;
 	private String memberAddress;
 	private String memberPhone;
-	private String memberDateJoined;
+	private Calendar memberDateJoined;
 	private double memberFee;
 	private double transactionAmount;
 	private String transactionDate;
@@ -133,11 +135,11 @@ public abstract class DataTransfer {
 		this.memberPhone = memberPhone;
 	}
 	
-	public String getMemberDateJoined() {
+	public Calendar getMemberDateJoined() {
 		return memberDateJoined;
 	}
 	
-	public void setMemberDateJoined(String memberDateJoined) {
+	public void setMemberDateJoined(Calendar memberDateJoined) {
 		this.memberDateJoined = memberDateJoined;
 	}
 

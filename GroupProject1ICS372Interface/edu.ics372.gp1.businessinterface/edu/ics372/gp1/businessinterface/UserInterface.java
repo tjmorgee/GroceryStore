@@ -255,7 +255,7 @@ public class UserInterface {
 		Request.instance().setMemberName(getName("Enter member name"));
 		Request.instance().setMemberAddress(getName("Enter address"));
 		Request.instance().setMemberPhone(getName("Enter phone"));
-		Request.instance().setMemberDateJoined(getName("Enter date joined (mm/dd/yyyy)"));
+		Request.instance().setMemberDateJoined(getDate("Enter date joined"));
 		Request.instance().setMemberFee(getDouble("Enter fee"));
 		Result result = groceryStore.addMember(Request.instance());
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {

@@ -45,7 +45,7 @@ public class Member implements Serializable {
 	private String address;
 	private String phone;
 	private String id;
-	private String dateJoined;
+	private Calendar dateJoined;
 	private double fee;
 	private static final String MEMBER_STRING = "M";
 	private List<Transaction> transactions = new LinkedList<Transaction>();
@@ -60,7 +60,7 @@ public class Member implements Serializable {
 	 * @param dateJoined date that member joined the GroceryStore
 	 * @param fee	  fee paid by member when joining
 	 */
-	public Member(String name, String address, String phone, String dateJoined, double fee) {
+	public Member(String name, String address, String phone, Calendar dateJoined, double fee) {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
@@ -135,7 +135,7 @@ public class Member implements Serializable {
 	 * 
 	 * @return date joined
 	 */
-	public String getDateJoined() {
+	public Calendar getDateJoined() {
 		return dateJoined;
 	}
 	
@@ -189,7 +189,7 @@ public class Member implements Serializable {
 	 * 
 	 * @param newDateJoined	date member joined
 	 */
-	public void setDateJoined(String newDateJoined) {
+	public void setDateJoined(Calendar newDateJoined) {
 		dateJoined = newDateJoined;
 	}
 	

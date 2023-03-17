@@ -5,6 +5,7 @@ import edu.ics372.gp1.business.facade.GroceryStore;
 import edu.ics372.gp1.business.facade.Request;
 import edu.ics372.gp1.business.facade.Result;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,11 +21,13 @@ public class AutomatedTester {
 	public void testAddMembers() {
 		Result result;
 		List<Member> members = new LinkedList<Member>();
-		Member member1 = new Member("Tilly", "1234 This Way", "651-654-1234", "01/01/2022", 25.00);
-		Member member2 = new Member("Jenkins", "12104 Yellow St N", "651-320-5546", "01/03/2022", 25.00);
-		Member member3 = new Member("Tuck", "1108 Quay St NE", "763-222-1981", "01/03/2022", 25.00);
-		Member member4 = new Member("Bill", "15 Rodeo Way", "612-999-0091", "01/05/2022", 30.00);
-		Member member5 = new Member("Ricky", "99 Superior St", "320-543-9876", "01/11/2022", 35.00);
+		Calendar date = Calendar.getInstance();
+		Member member1 = new Member("Tilly", "1234 This Way", "651-654-1234", date, 25.00);
+		Member member2 = new Member("Jenkins", "12104 Yellow St N", "651-320-5546", date, 25.00);
+		Member member3 = new Member("Tuck", "1108 Quay St NE", "763-222-1981", date, 25.00);
+		date.set(2022, 4, 15);
+		Member member4 = new Member("Bill", "15 Rodeo Way", "612-999-0091", date, 30.00);
+		Member member5 = new Member("Ricky", "99 Superior St", "320-543-9876", date, 35.00);
 		members.add(member1);
 		members.add(member2);
 		members.add(member3);
