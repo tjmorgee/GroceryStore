@@ -21,18 +21,38 @@ public class LineItem implements Serializable {
 		total = productPrice * quantity;
 	}
 
+	/**
+	 * Getter for product name
+	 * 
+	 * @return name
+	 */
 	public String getProductName() {
 		return productName;
 	}
 
+	/**
+	 * Getter for product price
+	 * 
+	 * @return price
+	 */
 	public double getProductPrice() {
 		return productPrice;
 	}
 
+	/**
+	 * Getter for product quantity
+	 * 
+	 * @return quantity
+	 */
 	public int getQuantity() {
 		return quantity;
 	}
 
+	/**
+	 * Getter for lineItem total
+	 * 
+	 * @return total
+	 */
 	public double getTotal() {
 		return total;
 	}

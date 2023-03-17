@@ -30,14 +30,29 @@ public class Order implements Serializable {
 		this.quantityOrdered = quantityOrdered;
 	}
 	
+	/**
+	 * Gets the product id of order
+	 * 
+	 * @return id
+	 */
 	public String getProductId() {
 		return productId;
 	}
 	
+	/**
+	 * Gets name of product ordered
+	 * 
+	 * @return name
+	 */
 	public String getProductName() {
 		return productName;
 	}
 	
+	/**
+	 * Gets quantity ordered
+	 * 
+	 * @return quantity ordered
+	 */
 	public int getQuantityOrdered() {
 		return quantityOrdered;
 	}

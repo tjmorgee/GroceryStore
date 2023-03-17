@@ -29,22 +29,47 @@ public class Product implements Serializable {
 		id = PRODUCT_STRING + ++productIdCounter;
 	}
 	
+	/**
+	 * Gets name of product
+	 * 
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * Gets id of product
+	 * 
+	 * @return id
+	 */
 	public String getId() {
 		return id;
 	}
 	
+	/**
+	 * Gets price of product
+	 * 
+	 * @return price
+	 */
 	public double getPrice() {
 		return price;
 	}
 	
+	/**
+	 * Gets reorder level for product
+	 * 
+	 * @return reorder level
+	 */
 	public int getReorderLevel() {
 		return reorderLevel;
 	}
 	
+	/**
+	 * Gets stock for product
+	 * 
+	 * @return stock
+	 */
 	public int getStock() {
 		return stock;
 	}

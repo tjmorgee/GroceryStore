@@ -23,7 +23,6 @@ import java.io.ObjectOutputStream;
  * and are not responsible for any loss or damage resulting from its use.  
  */
 import java.io.Serializable;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -36,7 +35,7 @@ import edu.ics372.gp1.business.iterators.SafeTransactionIterator;
 /**
  * Member represents a member of the GroceryStore.
  * 
- * @author Brahma Dathan and Sarnath Ramnath
+ * @author Brahma Dathan, Sarnath Ramnath, Thomas Morgenstern, and Jonathan Voss
  *
  */
 public class Member implements Serializable {
@@ -80,6 +79,13 @@ public class Member implements Serializable {
 				new FilteredIterator(transactions.iterator(), transaction -> transaction.onDate(date)));
 	}
 
+	/**
+	 * Gets an iterator to a collection of transactions between two dates
+	 * 
+	 * @param date1	first date
+	 * @param date2	second date
+	 * @return iterator to the collection
+	 */
 	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
 		return new SafeTransactionIterator(
 				new FilteredIterator(transactions.iterator(), transaction -> transaction.betweenDates(date1, date2)));
@@ -94,6 +100,11 @@ public class Member implements Serializable {
 		return transactions.iterator();
 	}
 
+	/**
+	 * Method for storing new transactions per member
+	 * 
+	 * @param total	paid for transaction
+	 */
 	public void addTransaction(double total) {
 		Transaction transaction = new Transaction(total);
 		transactions.add(transaction);
