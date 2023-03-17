@@ -1,8 +1,12 @@
 package edu.ics372.gp1.business.entities;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 /**
- * Product represents a product of the GroceryStore.
+ * Product represents a product of the grocery store.
  * 
  * @author Thomas Morgenstern
  *
@@ -26,23 +30,23 @@ public class Product implements Serializable {
 	}
 	
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public String getId() {
-		return this.id;
+		return id;
 	}
 	
 	public double getPrice() {
-		return this.price;
+		return price;
 	}
 	
 	public int getReorderLevel() {
-		return this.reorderLevel;
+		return reorderLevel;
 	}
 	
 	public int getStock() {
-		return this.stock;
+		return stock;
 	}
 	
 	/**
@@ -51,7 +55,7 @@ public class Product implements Serializable {
 	 * @param quantity of product ordered
 	 */
 	public void updateStock(int newStock) {
-		this.stock += newStock;
+		stock += newStock;
 	}
 	
 	/**
@@ -59,7 +63,16 @@ public class Product implements Serializable {
 	 * 
 	 * @param new price
 	 */
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPrice(double newPrice) {
+		price = newPrice;
 	}
+	
+	public static void save(ObjectOutputStream output) throws IOException {
+		output.writeObject(productIdCounter);
+	}
+
+	public static void retrieve(ObjectInputStream input) throws IOException, ClassNotFoundException {
+		productIdCounter = (int) input.readObject();
+	}
+
 }

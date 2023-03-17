@@ -23,6 +23,7 @@ package edu.ics372.gp1.business.iterators;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import edu.ics372.gp1.business.entities.Transaction;
 import edu.ics372.gp1.business.facade.Result;
 
 /**

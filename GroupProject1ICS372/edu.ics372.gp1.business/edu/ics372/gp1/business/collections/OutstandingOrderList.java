@@ -14,7 +14,7 @@ import edu.ics372.gp1.business.entities.Product;
  * @author Thomas Morgenstern
  *
  */
-public class OutstandingOrderList implements Iterable<Order>, Serializable{
+public class OutstandingOrderList implements Iterable<Order>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private static OutstandingOrderList orders;
 	private List<Order> orderList = new LinkedList<Order>();
@@ -25,11 +25,9 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	
 	public static OutstandingOrderList getInstance() {
 		if (orders == null) {
-			return orders = new OutstandingOrderList();
+			orders = new OutstandingOrderList();
 		}
-		else {
-			return orders;
-		}
+		return orders;
 	}
 	
 	/**
@@ -40,9 +38,9 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	 * @return order if found otherwise null.
 	 */
 	public Order search(String productId) {
-		for (Iterator<Order> iterator = orders.iterator(); iterator.hasNext();) {
+		for (Iterator<Order> iterator = orderList.iterator(); iterator.hasNext();) {
 			Order order = (Order) iterator.next();
-			if (order.getProductId().equals(productId)) {
+			if (order.getProductId().equalsIgnoreCase(productId)) {
 				return order;
 			}
 		}
@@ -55,6 +53,9 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	 * @param order to be added.
 	 */
 	public void addOrder(Order order) {
+		if (order == null) {
+			return;
+		}
 		orderList.add(order);
 	}
 	
@@ -63,8 +64,8 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable{
 	 * 
 	 * @param order to be removed.
 	 */
-	public void removeOrder(Order order) {
-		orderList.remove(order);
+	public boolean removeOrder(Order order) {
+		return orderList.remove(order);
 	}
 	
 	/**

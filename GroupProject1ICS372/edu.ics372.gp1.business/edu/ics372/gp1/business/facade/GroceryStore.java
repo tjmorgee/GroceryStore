@@ -29,18 +29,22 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.ics372.gp1.business.collections.Catalog;
 import edu.ics372.gp1.business.collections.MemberList;
 import edu.ics372.gp1.business.collections.OutstandingOrderList;
 import edu.ics372.gp1.business.collections.Cart;
 import edu.ics372.gp1.business.entities.Product;
+import edu.ics372.gp1.business.entities.Transaction;
 import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.LineItem;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
+import edu.ics372.gp1.business.iterators.FilteredIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
 import edu.ics372.gp1.business.iterators.SafeOrderIterator;
+import edu.ics372.gp1.business.tests.AutomatedTester;
 
 /**
  * The facade class handling all requests from users.
@@ -86,15 +90,20 @@ public class GroceryStore implements Serializable {
 	 */
 	public Result addProduct(Request request) {
 		Result result = new Result();
-		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
-		if (catalog.insertProduct(product)) {
-			result.setResultCode(Result.OPERATION_COMPLETED);
-			result.setProductFields(product);
-			return result;
+		for(Iterator<Product> iterator = catalog.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if(product.getName().equalsIgnoreCase(request.getProductName())) {
+				result.setResultCode(Result.OPERATION_FAILED);
+				return result;
+			}
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
+		Product product = new Product(request.getProductName(), request.getProductPrice(), request.getProductReorderLevel());
+		orders.addOrder(catalog.insertProduct(product));
+		result.setProductFields(product);
+		result.setResultCode(Result.OPERATION_COMPLETED);
 		return result;
 	}
+	
 /**
  * Adds a line item to a customer's purchase
  * @param request
@@ -130,10 +139,24 @@ public class GroceryStore implements Serializable {
 			orders.addOrder(order);
 			result.setResultCode(Result.ORDER_PLACED);
 		} else {
+			// Add something in here so you can't purchase a higher quantity than in stock
 			result.setResultCode(Result.OPERATION_COMPLETED);
 		}
 		return result;
 	}
+	
+	public Result addTransaction(Request request) {
+		Result result = new Result();
+		Member member = members.searchId(request.getMemberId());
+		double total = 0;
+		for(Iterator<LineItem> iterator = cart.iterator(); iterator.hasNext();) {
+			total += cart.removeLineItem().getTotal();
+		}
+		member.addTransaction(total);
+		result.setResultCode(Result.OPERATION_COMPLETED);
+		return result;
+	}
+	
 	/**
 	 * Organizes the operations for adding a member
 	 * 
@@ -174,27 +197,27 @@ public class GroceryStore implements Serializable {
 	 * @param name of product
 	 * @return the Product object created
 	 */
-	public Result retrieveProductInfo(String name) {
+	public Result retrieveProductInfo(Request request) {
 		Result result = new Result();
-		for(Iterator<Product> iterator = catalog.iterator(); iterator.hasNext();) {
-			Product product = (Product) iterator.next();
-			if(product.getName().equals(name)) {
-				result.setResultCode(Result.OPERATION_COMPLETED);
-				result.setProductFields(product);
-				return result;
-			}
+		Product product = catalog.retrieveInfo(request.getProductName());
+		if (product != null) {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setProductFields(product);
+		} else {
+			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 	
 	public Result retrieveProductRequest(Request request) {
 		Result result = new Result();
 		Product product = catalog.search(request.getProductId());
-		if (product != null)
+		if (product != null) {
 			result.setResultCode(Result.OPERATION_COMPLETED);
-		else
+			result.setProductFields(product);
+		} else {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
+		}
 		return result;
 	}
 	
@@ -206,11 +229,11 @@ public class GroceryStore implements Serializable {
 	 */
 	public Result processShipment(Request request) {
 		Result result = new Result();
-		Order temp = orders.search(request.getProductId());
-		if (temp != null) {
-			Product product = catalog.search(temp.getProductId());
-			product.updateStock(temp.getQuantityOrdered());
-			orders.removeOrder(temp);
+		Order order = orders.search(request.getProductId());
+		if (order != null) {
+			Product product = catalog.search(order.getProductId());
+			product.updateStock(order.getQuantityOrdered());
+			orders.removeOrder(order);
 			result.setResultCode(Result.OPERATION_COMPLETED);
 			result.setProductFields(product);
 			return result;
@@ -224,7 +247,8 @@ public class GroceryStore implements Serializable {
 	/**
 	 * Method for changing the price of a product
 	 * 
-	 * @param product id, product new price
+	 * @param id	product id
+	 * @param price	product new price
 	 * @return product name, updated price if product found
 	 */
 	public Result changePrice(Request request) {
@@ -239,34 +263,28 @@ public class GroceryStore implements Serializable {
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
-	
-	/**
-	 * Method for creating orders of a product.
-	 * 
-	 * @param product id, name, quantity ordered
-	 * @return result code signaling pass/fail
-	 */
-	public Result createOrder(Request request) {
-		Result result = new Result();
-		Order order = new Order(request.getProductId(), request.getProductName(), request.getQuantityOrdered());
-		if (orders.search(order.getProductId()).equals(order)) {
-			result.setResultCode(Result.OPERATION_FAILED);
-			return result;
-		}
-		orders.addOrder(order);
-		result.setResultCode(Result.OPERATION_COMPLETED);
-		return result;
-	}
 
 	/**
-	 * Searches for a given member
+	 * Searches for a given member by their name
 	 * 
-	 * @param memberName  of the member
-	 * @return true iff the member is in the member list collection
+	 * @param member name of the member
+	 * @return member and true if found
 	 */
 	public Result searchMembership(Request request) {
 		Result result = new Result();
 		Member member = members.search(request.getMemberName());
+		if (member == null) {
+			result.setResultCode(Result.NO_SUCH_MEMBER);
+		} else {
+			result.setResultCode(Result.OPERATION_COMPLETED);
+			result.setMemberFields(member);
+		}
+		return result;
+	}
+	
+	public Result checkMembership(Request request) {
+		Result result = new Result();
+		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			result.setResultCode(Result.NO_SUCH_MEMBER);
 		} else {
@@ -285,7 +303,7 @@ public class GroceryStore implements Serializable {
 	 * @return iterator to the collection
 	 */
 	public Iterator<Result> getTransactions(Request request) {
-		Member member = members.search(request.getMemberId());
+		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}
@@ -303,6 +321,7 @@ public class GroceryStore implements Serializable {
 			ObjectInputStream input = new ObjectInputStream(file);
 			groceryStore = (GroceryStore) input.readObject();
 			Member.retrieve(input);
+			Product.retrieve(input);
 			return groceryStore;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -324,12 +343,17 @@ public class GroceryStore implements Serializable {
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(groceryStore);
 			Member.save(output);
+			Product.save(output);
 			file.close();
 			return true;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return false;
 		}
+	}
+	
+	public void test() {
+		AutomatedTester test = new AutomatedTester();
 	}
 
 	/**

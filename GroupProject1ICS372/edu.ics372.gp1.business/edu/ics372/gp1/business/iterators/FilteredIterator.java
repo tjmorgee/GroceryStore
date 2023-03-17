@@ -20,6 +20,7 @@
 
 package edu.ics372.gp1.business.iterators;
 
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
@@ -74,7 +75,7 @@ public class FilteredIterator implements Iterator<Transaction> {
 	private void getNextItem() {
 		while (iterator.hasNext()) {
 			item = iterator.next();
-			if (predicate.test(item)) {
+			if(predicate.test(item)) {
 				return;
 			}
 		}

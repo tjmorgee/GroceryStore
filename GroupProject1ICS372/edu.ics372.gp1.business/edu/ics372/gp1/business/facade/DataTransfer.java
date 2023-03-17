@@ -25,6 +25,7 @@ import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Transaction;
+
 import edu.ics372.gp1.business.entities.LineItem;
 
 /**
@@ -60,7 +61,7 @@ public abstract class DataTransfer {
 	public DataTransfer() {
 		reset();
 	}
-
+	
 	public String getProductId() {
 		return productId;
 	}
@@ -165,6 +166,10 @@ public abstract class DataTransfer {
 	public void setTransactionAmount(double transactionAmount) {
 		this.transactionAmount = transactionAmount;
 	}
+	
+	public double getTransactionAmount() {
+		return transactionAmount;
+	}
 	public String getTransactionDate() {
 		return transactionDate;
 	}
@@ -191,7 +196,7 @@ public abstract class DataTransfer {
 
 	public void setTransactionFields(Transaction transaction) {
 		setTransactionDate(transaction.getDate());
-		setTransactionAmount(transaction.getPaid());
+		setTransactionAmount(transaction.getTotal());
 	}
 
 	/**

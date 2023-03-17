@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 
 /**
@@ -53,13 +54,30 @@ public class Catalog implements Iterable<Product>, Serializable {
 	 * Checks whether a product with a given product id exists.
 	 * 
 	 * @param productId the id of the product
-	 * @return true iff the product exists
+	 * @return product if found otherwise null
 	 * 
 	 */
 	public Product search(String productId) {
 		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
 			Product product = (Product) iterator.next();
-			if (product.getId().equals(productId)) {
+			if (product.getId().equalsIgnoreCase(productId)) {
+				return product;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Searches for a product within the catalog given its name.
+	 * 
+	 * @param productName the name of the product
+	 * @return product if found otherwise null
+	 * 
+	 */
+	public Product retrieveInfo(String productName) {
+		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
+			Product product = (Product) iterator.next();
+			if (product.getName().equalsIgnoreCase(productName)) {
 				return product;
 			}
 		}
@@ -70,11 +88,16 @@ public class Catalog implements Iterable<Product>, Serializable {
 	 * Inserts a product into the collection
 	 * 
 	 * @param product the product to be inserted
-	 * @return true iff the product could be inserted. Currently always true
 	 */
-	public boolean insertProduct(Product product) {
+	public Order insertProduct(Product product) {
+		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
+			Product tempProduct = (Product) iterator.next();
+			if (tempProduct.getName().equalsIgnoreCase(product.getName())) {
+				return null;
+			}
+		}
 		products.add(product);
-		return true;
+		return new Order(product.getId(), product.getName(), product.getReorderLevel() * 2);
 	}
 
 	/**

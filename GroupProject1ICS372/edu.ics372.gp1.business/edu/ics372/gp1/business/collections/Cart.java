@@ -11,31 +11,31 @@ public class Cart implements Iterable<LineItem>, Serializable {
 	private static final long serialVersionUID = 1l;
 	private Queue<LineItem> lineItems = new LinkedList<LineItem>();
 	private static Cart cart;
-	
+
 	private Cart() {
 	}
-	
+
 	public static Cart getInstance() {
 		if (cart == null) {
 			cart = new Cart();
 		}
 		return cart;
 	}
-	
+
 	public boolean addLineItem(LineItem lineItem) {
 		lineItems.add(lineItem);
 		return true;
 	}
-	
+
 	public LineItem removeLineItem() {
 		return lineItems.remove();
 	}
-	
-	
-	
+
+
+
 	@Override
 	public Iterator<LineItem> iterator() {
 		return lineItems.iterator();
 	}
-	
+
 }

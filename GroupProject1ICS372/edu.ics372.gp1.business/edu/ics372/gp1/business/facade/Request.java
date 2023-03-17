@@ -35,7 +35,6 @@ import java.util.Calendar;
  */
 public class Request extends DataTransfer {
 	private static Request request;
-	private int holdDuration;
 	private Calendar date;
 
 	/**
@@ -55,14 +54,6 @@ public class Request extends DataTransfer {
 			request = new Request();
 		}
 		return request;
-	}
-
-	public int getHoldDuration() {
-		return holdDuration;
-	}
-
-	public void setHoldDuration(int holdDuration) {
-		this.holdDuration = holdDuration;
 	}
 
 	public Calendar getDate() {

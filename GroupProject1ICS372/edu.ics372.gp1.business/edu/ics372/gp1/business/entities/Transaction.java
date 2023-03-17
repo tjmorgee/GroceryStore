@@ -20,18 +20,23 @@ package edu.ics372.gp1.business.entities;
  * and are not responsible for any loss or damage resulting from its use.  
  */
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a single Transaction (purchase of items)
  * 
- * @author Brahma Dathan
+ * @author Thomas Morgenstern
  *
  */
 public class Transaction implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private double paid;
+	private double total;
 	private Calendar date;
 
 	/**
@@ -41,8 +46,8 @@ public class Transaction implements Serializable {
 	 * 
 	 */
 	public Transaction(double paid) {
-		this.paid = paid;
-		date = new GregorianCalendar();
+		total = paid;
+		date = Calendar.getInstance();
 	}
 
 	/**
@@ -63,8 +68,8 @@ public class Transaction implements Serializable {
 	 * 
 	 * @return paid field
 	 */
-	public double getPaid() {
-		return paid;
+	public double getTotal() {
+		return total;
 	}
 
 	/**
@@ -73,7 +78,12 @@ public class Transaction implements Serializable {
 	 * @return date with month, date, and year
 	 */
 	public String getDate() {
-		return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+		int month = Calendar.MONTH + 1;
+		return month + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
+	}
+	
+	public Calendar getTransactionDate() {
+		return date;
 	}
 
 	/**
@@ -82,6 +92,6 @@ public class Transaction implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return (this.getDate() + "   " + paid);
+		return getDate() + "  " + total;
 	}
 }
