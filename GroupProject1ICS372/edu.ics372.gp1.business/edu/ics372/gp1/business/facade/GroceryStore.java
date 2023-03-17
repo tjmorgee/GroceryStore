@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.ics372.gp1.business.collections.Catalog;
 import edu.ics372.gp1.business.collections.MemberList;
@@ -140,6 +141,15 @@ public class GroceryStore implements Serializable {
 		}
 		return result;
 	}
+	
+	public Result addTransaction(Request request) {
+		Result result = new Result();
+		Member member = members.searchId(request.getMemberId());
+		member.addTransaction(request.getTransactionAmount());
+		result.setResultCode(Result.OPERATION_COMPLETED);
+		return result;
+	}
+	
 	/**
 	 * Organizes the operations for adding a member
 	 * 
@@ -210,8 +220,10 @@ public class GroceryStore implements Serializable {
 		if (product == null) {
 			result.setResultCode(Result.PRODUCT_NOT_FOUND);
 		} else {
-			cart.addItem(product);
-			cart.addQuantity(request.getQuantityPurchased());
+			//cart.addItem(product);
+			//cart.addQuantity(request.getQuantityPurchased());
+			items.add(product);
+			quantities.add(request.getQuantityPurchased());
 			result.setResultCode(Result.OPERATION_COMPLETED);
 		}
 		return result;
@@ -222,8 +234,8 @@ public class GroceryStore implements Serializable {
 		Member member = members.searchId(request.getMemberId());
 		double total = 0;
 		for(int item = 0; item < cart.size(); item++) {
-			Product product = cart.removeItem(item);
-			total += product.getPrice() * cart.getQuantity(item);
+			Product product = items.remove(item);
+			total += product.getPrice() * quantities.remove(item);
 		}	
 		member.addTransaction(total);
 		result.setTransactionAmount(total);
@@ -313,7 +325,7 @@ public class GroceryStore implements Serializable {
 	 * @return iterator to the collection
 	 */
 	public Iterator<Result> getTransactions(Request request) {
-		Member member = members.search(request.getMemberId());
+		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}

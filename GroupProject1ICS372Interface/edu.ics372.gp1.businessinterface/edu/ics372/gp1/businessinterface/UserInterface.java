@@ -327,6 +327,8 @@ public class UserInterface {
 		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 			System.out.println("No member with id " + Request.instance().getMemberId());
 		} else {
+			String receipt = "";
+			double total = 0;
 			do {
 				Request.instance().setProductId(getToken("Enter product id"));
 				result = groceryStore.retrieveProductRequest(Request.instance());
@@ -343,7 +345,14 @@ public class UserInterface {
 				} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
 					displayResultCode(result.getResultCode());
 				}
+				receipt += result.getProductName() + "\t" + result.getQuantityPurchased() + "\t$" + result.getProductPrice()
+					+ "\t$" + result.getProductPrice() * result.getQuantityPurchased() + "\n";
+				total += result.getProductPrice() * result.getQuantityPurchased();
 			} while (yesOrNo("Check out more items?"));
+			Request.instance().setTransactionAmount(total);
+			result = groceryStore.addTransaction(Request.instance());
+			receipt += "Total\t\t\t$" + total + "\n";
+			System.out.println(receipt);
 		}
 	}
 	
@@ -433,6 +442,17 @@ public class UserInterface {
 	 * transactions.
 	 * 
 	 */
+//	public void getTransactions() {
+//		Request.instance().setMemberId(getName("Enter member id"));
+//		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
+//		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
+//		while (result.hasNext()) {
+//			Result transaction = result.next();
+//			System.out.println(transaction.getTransactionDate() + "   " + transaction.getMemberFee() + "\n");
+//		}
+//		System.out.println("\n End of transactions \n");
+//	}
+	
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
 		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
