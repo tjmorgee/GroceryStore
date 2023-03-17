@@ -305,6 +305,7 @@ public class GroceryStore implements Serializable {
 			ObjectInputStream input = new ObjectInputStream(file);
 			groceryStore = (GroceryStore) input.readObject();
 			Member.retrieve(input);
+			Product.retrieve(input);
 			return groceryStore;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -326,6 +327,7 @@ public class GroceryStore implements Serializable {
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(groceryStore);
 			Member.save(output);
+			Product.save(output);
 			file.close();
 			return true;
 		} catch (IOException ioe) {

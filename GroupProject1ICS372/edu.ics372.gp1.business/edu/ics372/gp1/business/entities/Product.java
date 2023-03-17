@@ -1,6 +1,10 @@
 package edu.ics372.gp1.business.entities;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 /**
  * Product represents a product of the GroceryStore.
  * 
@@ -62,4 +66,13 @@ public class Product implements Serializable {
 	public void setPrice(double newPrice) {
 		price = newPrice;
 	}
+	
+	public static void save(ObjectOutputStream output) throws IOException {
+		output.writeObject(productIdCounter);
+	}
+
+	public static void retrieve(ObjectInputStream input) throws IOException, ClassNotFoundException {
+		productIdCounter = (int) input.readObject();
+	}
+
 }

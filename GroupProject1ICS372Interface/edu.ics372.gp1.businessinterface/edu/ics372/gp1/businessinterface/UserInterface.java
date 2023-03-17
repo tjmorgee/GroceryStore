@@ -65,7 +65,7 @@ public class UserInterface {
 	 * Otherwise, it gets a singleton GroceryStore object.
 	 */
 	private UserInterface() {
-		if (yesOrNo("Look for saved data and  use it?")) {
+		if (yesOrNo("Look for saved data and use it?")) {
 			retrieve();
 		} else {
 			groceryStore = GroceryStore.instance();
