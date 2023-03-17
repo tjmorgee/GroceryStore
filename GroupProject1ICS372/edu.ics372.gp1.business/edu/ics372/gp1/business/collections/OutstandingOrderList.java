@@ -53,6 +53,9 @@ public class OutstandingOrderList implements Iterable<Order>, Serializable {
 	 * @param order to be added.
 	 */
 	public void addOrder(Order order) {
+		if (order == null) {
+			return;
+		}
 		orderList.add(order);
 	}
 	

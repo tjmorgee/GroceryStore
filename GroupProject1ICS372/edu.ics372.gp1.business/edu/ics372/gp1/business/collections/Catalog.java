@@ -90,6 +90,12 @@ public class Catalog implements Iterable<Product>, Serializable {
 	 * @param product the product to be inserted
 	 */
 	public Order insertProduct(Product product) {
+		for (Iterator<Product> iterator = products.iterator(); iterator.hasNext();) {
+			Product tempProduct = (Product) iterator.next();
+			if (tempProduct.getName().equalsIgnoreCase(product.getName())) {
+				return null;
+			}
+		}
 		products.add(product);
 		return new Order(product.getId(), product.getName(), product.getReorderLevel() * 2);
 	}

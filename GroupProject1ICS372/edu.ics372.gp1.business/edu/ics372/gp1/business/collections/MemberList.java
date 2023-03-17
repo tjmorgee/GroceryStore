@@ -38,7 +38,7 @@ public class MemberList implements Iterable<Member>, Serializable {
 	public boolean removeMember(String id) {
 		for (Iterator<Member> iterator = members.iterator(); iterator.hasNext();) {
 			Member member = iterator.next();
-			if (member.getId().equals(id)) {
+			if (member.getId().equalsIgnoreCase(id)) {
 				members.remove(member);
 				return true;
 			}
