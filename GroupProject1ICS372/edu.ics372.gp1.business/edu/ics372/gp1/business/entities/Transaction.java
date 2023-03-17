@@ -61,6 +61,11 @@ public class Transaction implements Serializable {
 				&& (date.get(Calendar.MONTH) == this.date.get(Calendar.MONTH))
 				&& (date.get(Calendar.DATE) == this.date.get(Calendar.DATE)));
 	}
+	
+	public boolean betweenDates(Calendar date1, Calendar date2) {
+		date2.add(Calendar.DAY_OF_YEAR, 1);
+		return (this.date.after(date1) && this.date.before(date2));
+	}
 
 
 	/**

@@ -80,6 +80,11 @@ public class Member implements Serializable {
 				new FilteredIterator(transactions.iterator(), transaction -> transaction.onDate(date)));
 	}
 
+	public Iterator<Result> getTransactionsBetweenDates(Calendar date1, Calendar date2) {
+		return new SafeTransactionIterator(
+				new FilteredIterator(transactions.iterator(), transaction -> transaction.betweenDates(date1, date2)));
+		
+	}
 	/**
 	 * Returns the list of all transactions for this member.
 	 * 

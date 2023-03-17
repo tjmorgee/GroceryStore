@@ -307,7 +307,7 @@ public class GroceryStore implements Serializable {
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}
-		return member.getTransactionsOnDate(request.getDate());
+		return member.getTransactionsBetweenDates(Request.instance().getDate(), Request.instance().getEndDate());
 	}
 
 	/**
