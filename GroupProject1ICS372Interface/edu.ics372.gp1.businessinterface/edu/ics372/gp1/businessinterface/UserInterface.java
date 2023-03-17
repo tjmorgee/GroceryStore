@@ -58,11 +58,7 @@ public class UserInterface {
 	private static final int LIST_PRODUCTS = 11;
 	private static final int LIST_ORDERS = 12;
 	private static final int SAVE = 13;
-<<<<<<< HEAD
 	private static final int HELP = 15;
-=======
-	private static final int HELP = 14;
->>>>>>> refs/remotes/origin/main
 
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved data.
@@ -430,12 +426,8 @@ public class UserInterface {
 	 */
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
-<<<<<<< HEAD
 		Request.instance().setDate(getDate("Please enter the start date for which you want records as mm/dd/yy"));
 		Request.instance().setEndDate(getDate("Please enter the end date for which you want records as mm/dd/yy"));
-=======
-		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
->>>>>>> refs/remotes/origin/main
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
