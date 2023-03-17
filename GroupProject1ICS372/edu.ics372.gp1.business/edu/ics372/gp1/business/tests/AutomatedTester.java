@@ -104,4 +104,8 @@ public class AutomatedTester {
 		testRetrieveMember();
 		testAddProducts();
 	}
+	
+	public static void main(String[] args) {
+		AutomatedTester test = new AutomatedTester();
+	}
 }
