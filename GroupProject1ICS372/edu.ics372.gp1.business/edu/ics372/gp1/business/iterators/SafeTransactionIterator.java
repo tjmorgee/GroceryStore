@@ -39,9 +39,9 @@ public class SafeTransactionIterator implements Iterator<Result> {
 	private Result result = new Result();
 
 	/**
-	 * The user of SafeIterator must supply an Iterator to Book.
+	 * The user of SafeIterator must supply an Iterator to Transaction.
 	 * 
-	 * @param iterator Iterator<Book>
+	 * @param iterator Iterator<Transaction>
 	 */
 	public SafeTransactionIterator(FilteredIterator iterator) {
 		this.iterator = iterator;

@@ -28,7 +28,7 @@ import edu.ics372.gp1.business.facade.Result;
 
 /**
  * This Iterator implementation is tailor-made to supply a "read-only" version
- * of Book objects. The user should supply an iterator to Book as the parameter
+ * of Product objects. The user should supply an iterator to Product as the parameter
  * to the constructor.
  * 
  * @author Brahma Dathan
