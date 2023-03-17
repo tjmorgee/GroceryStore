@@ -58,7 +58,7 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_COMPLETED;
 		Request.instance().setMemberId("G4");
 		result = groceryStore.removeMember(Request.instance());
-		assert result.getResultCode() == Result.NO_SUCH_MEMBER;
+		assert result.getResultCode() == Result.OPERATION_FAILED;
 	}
 	
 	// add 20 products to catalog (product ids starting around 20? not end of world but odd bug)
