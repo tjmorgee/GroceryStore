@@ -3,7 +3,7 @@ package edu.ics372.gp1.businessinterface;
 
 /**
  * test
- * @author Brahma Dathan, Sarnath Ramnath, and Jonathon Voss
+ * @author Brahma Dathan, Sarnath Ramnath, Thomas Morgenstern, and Jonathon Voss
  * @Copyright (c) 2010, 2023
  
  * Redistribution and use with or without
@@ -73,7 +73,6 @@ public class UserInterface {
 				groceryStore.test();
 			}
 		}
-
 	}
 
 	/**
@@ -128,7 +127,6 @@ public class UserInterface {
 				System.exit(0);
 			}
 		} while (true);
-
 	}
 
 	/**
