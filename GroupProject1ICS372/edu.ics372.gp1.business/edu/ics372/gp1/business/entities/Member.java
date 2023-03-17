@@ -50,6 +50,7 @@ public class Member implements Serializable {
 	private static final String MEMBER_STRING = "M";
 	private List<Transaction> transactions = new LinkedList<Transaction>();
 	//private List<Product> cart = new LinkedList<Product>();
+	private List<Transaction> temp = new LinkedList<Transaction>();
 	private static int idCounter;
 
 	/**
@@ -79,6 +80,22 @@ public class Member implements Serializable {
 	public Iterator<Result> getTransactionsOnDate(Calendar date) {
 		return new SafeTransactionIterator(
 				new FilteredIterator(transactions.iterator(), transaction -> transaction.onDate(date)));
+	}
+	
+	public Iterator<Result> getTransactionsFrom(Calendar date, Calendar otherDate){
+	//	temp = transactions;
+//		for(int i = 0; i < transactions.size(); i++) {
+////			if(transactions.get(i).getTransactionDate().equals(date) ||  transactions.get(i).getTransactionDate().after(date) 
+////					&& transactions.get(i).getTransactionDate().before(otherDate) || transactions.get(i).getTransactionDate().equals(otherDate)) {
+////				temp.add(transactions.get(i));
+////			}
+//			if(transactions.get(i).getTransactionDate().before(date) || transactions.get(i).getTransactionDate().after(otherDate)) {
+//				temp.remove(i);
+//			}
+//		}
+		
+		return new SafeTransactionIterator(
+				new FilteredIterator(transactions.iterator(), date, otherDate));
 	}
 
 	/**

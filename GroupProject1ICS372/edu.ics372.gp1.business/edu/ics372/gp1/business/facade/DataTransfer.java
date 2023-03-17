@@ -25,6 +25,9 @@ import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.Product;
 import edu.ics372.gp1.business.entities.Transaction;
+
+import java.util.Calendar;
+
 import edu.ics372.gp1.business.entities.LineItem;
 
 /**
@@ -60,7 +63,7 @@ public abstract class DataTransfer {
 	public DataTransfer() {
 		reset();
 	}
-
+	
 	public String getProductId() {
 		return productId;
 	}

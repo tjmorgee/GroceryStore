@@ -356,31 +356,6 @@ public class UserInterface {
 		}
 	}
 	
-	public void checkOut2() {
-		Request.instance().setMemberId(getToken("Enter member id"));
-		Result result = groceryStore.checkMembership(Request.instance());
-		if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-			System.out.println("No member with id " + Request.instance().getMemberId());
-		} else {
-			String receipt = "";
-			do {
-				Request.instance().setProductId(getToken("Enter product id"));
-				result = groceryStore.retrieveProductRequest(Request.instance());
-				if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-					displayResultCode(result.getResultCode());
-				} else {
-					Request.instance().setQuantityPurchased(getNumber("Enter quantity"));
-					result = groceryStore.addItemToCart(Request.instance());
-					receipt += result.getProductName() + "\t" + Request.instance().getQuantityPurchased() + "\t$" + result.getProductPrice()
-							+ "\t$" + (result.getProductPrice() * Request.instance().getQuantityPurchased() + "\n");
-				}
-			} while (yesOrNo("Check out more items?"));
-			result = groceryStore.checkOut(Request.instance());
-			receipt += "Total\t\t\t\t\t$" + result.getTransactionAmount() + "\n";
-			System.out.println(receipt);
-		}
-	}
-	
 	/**
 	 * Method for retrieving info regarding a product in the catalog. Prompts the user
 	 * for the product name and uses the appropriate GroceryStore method for retrieving the
@@ -439,20 +414,9 @@ public class UserInterface {
 	/**
 	 * Method to be called for displaying transactions. Prompts the user for the
 	 * appropriate values and uses the appropriate GroceryStore method for displaying
-	 * transactions.
+	 * transactions. (Currently works for single date)
 	 * 
 	 */
-//	public void getTransactions() {
-//		Request.instance().setMemberId(getName("Enter member id"));
-//		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
-//		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
-//		while (result.hasNext()) {
-//			Result transaction = result.next();
-//			System.out.println(transaction.getTransactionDate() + "   " + transaction.getMemberFee() + "\n");
-//		}
-//		System.out.println("\n End of transactions \n");
-//	}
-	
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
 		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));

@@ -83,6 +83,10 @@ public class Transaction implements Serializable {
 		return month + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
 	}
 	
+	public Calendar getTransactionDate() {
+		return date;
+	}
+	
 	public void addItem(double cost) {
 		//cart.add(product);
 		total += cost;

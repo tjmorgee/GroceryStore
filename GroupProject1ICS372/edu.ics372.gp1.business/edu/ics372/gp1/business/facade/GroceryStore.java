@@ -36,10 +36,12 @@ import edu.ics372.gp1.business.collections.MemberList;
 import edu.ics372.gp1.business.collections.OutstandingOrderList;
 import edu.ics372.gp1.business.collections.Cart;
 import edu.ics372.gp1.business.entities.Product;
+import edu.ics372.gp1.business.entities.Transaction;
 import edu.ics372.gp1.business.entities.Member;
 import edu.ics372.gp1.business.entities.Order;
 import edu.ics372.gp1.business.entities.LineItem;
 import edu.ics372.gp1.business.iterators.SafeProductIterator;
+import edu.ics372.gp1.business.iterators.FilteredIterator;
 import edu.ics372.gp1.business.iterators.SafeMemberIterator;
 import edu.ics372.gp1.business.iterators.SafeOrderIterator;
 import edu.ics372.gp1.business.tests.AutomatedTester;
@@ -329,12 +331,32 @@ public class GroceryStore implements Serializable {
 	 * @return iterator to the collection
 	 */
 	public Iterator<Result> getTransactions(Request request) {
+		//Result result = new Result();
 		Member member = members.searchId(request.getMemberId());
 		if (member == null) {
 			return new LinkedList<Result>().iterator();
 		}
 		return member.getTransactionsOnDate(request.getDate());
 	}
+	
+//	public Result getTransactions(Request request) {
+//		Result result = new Result();
+//		Member member = members.searchId(request.getMemberId());
+//		if (member == null) {
+//			return result;
+//		}
+//		while(member.getTransactions().hasNext()) {
+//			Transaction temp = member.getTransactions().next();
+//			if (temp.getTransactionDate().before(request.getFirstDate()) || 
+//					temp.getTransactionDate().after(request.getSecondDate())) {
+//				// do nothing
+//			} else {
+//				result.addDate(temp.getTransactionDate());
+//				result.addTotal(temp.getTotal());
+//			}
+//		}
+//		return result;
+//	}
 
 	/**
 	 * Retrieves a deserialized version of the groceryStore from disk
