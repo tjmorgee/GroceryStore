@@ -20,13 +20,7 @@ package edu.ics372.gp1.business.entities;
  * and are not responsible for any loss or damage resulting from its use.  
  */
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Represents a single Transaction (purchase of items)

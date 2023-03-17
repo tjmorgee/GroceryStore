@@ -52,7 +52,7 @@ public abstract class DataTransfer {
 	private Calendar memberDateJoined;
 	private double memberFee;
 	private double transactionAmount;
-	private String transactionDate;
+	private Calendar transactionDate;
 	private int quantityOrdered;
 	private int quantityPurchased;
 	private double totalPrice;
@@ -172,11 +172,11 @@ public abstract class DataTransfer {
 	public double getTransactionAmount() {
 		return transactionAmount;
 	}
-	public String getTransactionDate() {
+	public Calendar getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(String transactionDate) {
+	public void setTransactionDate(Calendar transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 	
@@ -197,7 +197,7 @@ public abstract class DataTransfer {
 	}
 
 	public void setTransactionFields(Transaction transaction) {
-		setTransactionDate(transaction.getDate());
+		setTransactionDate(transaction.getTransactionDate());
 		setTransactionAmount(transaction.getTotal());
 	}
 

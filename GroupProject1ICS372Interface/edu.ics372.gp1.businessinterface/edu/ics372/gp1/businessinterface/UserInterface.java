@@ -58,7 +58,7 @@ public class UserInterface {
 	private static final int LIST_PRODUCTS = 11;
 	private static final int LIST_ORDERS = 12;
 	private static final int SAVE = 13;
-	private static final int HELP = 15; //needs to be 15 as specified in the requirements
+	private static final int HELP = 14;
 
 	/**
 	 * Made private for singleton pattern. Conditionally looks for any saved data.
@@ -228,7 +228,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void help() {
-		System.out.println("Enter a number between 0 and 15 as explained below:");
+		System.out.println("Enter a number between 0 and 14 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
 		System.out.println(ADD_MEMBER + " to add a member");
 		System.out.println(REMOVE_MEMBER + " to remove member");
@@ -426,8 +426,7 @@ public class UserInterface {
 	 */
 	public void getTransactions() {
 		Request.instance().setMemberId(getName("Enter member id"));
-		Request.instance().setDate(getDate("Please enter the start date for which you want records as mm/dd/yy"));
-		Request.instance().setEndDate(getDate("Please enter the end date for which you want records as mm/dd/yy"));
+		Request.instance().setDate(getDate("Please enter the date for which you want records as mm/dd/yy"));
 		Iterator<Result> result = groceryStore.getTransactions(Request.instance());
 		while (result.hasNext()) {
 			Result transaction = result.next();
