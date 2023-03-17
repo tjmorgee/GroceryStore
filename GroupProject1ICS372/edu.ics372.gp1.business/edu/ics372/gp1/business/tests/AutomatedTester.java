@@ -6,10 +6,16 @@ import edu.ics372.gp1.business.facade.Request;
 import edu.ics372.gp1.business.facade.Result;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+/**
+ * This class generates a test bed of objects for the program and tests
+ * given methods using assert statements.
+ * 
+ * @author Thomas Morgenstern and Jonathan Voss
+ *
+ */
 public class AutomatedTester {
 	private GroceryStore groceryStore = GroceryStore.instance();
 	
@@ -17,7 +23,10 @@ public class AutomatedTester {
 		test();
 	}
 	
-	// add 5 members to member list, Will adjust date to be a date
+	/**
+	 * Method test for adding 5 members to grocery store (Business Process 1)
+	 * 
+	 */
 	public void testAddMembers() {
 		Result result;
 		List<Member> members = new LinkedList<Member>();
@@ -49,7 +58,10 @@ public class AutomatedTester {
 		}
 	}
 	
-	// Hard coded member id, was failing otherwise
+	/**
+	 * Method test for removing a member from grocery store (Business Process 2)
+	 * 
+	 */
 	public void testRemoveMember() {
 		Result result;
 		Request.instance().reset();
@@ -61,7 +73,10 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.NO_SUCH_MEMBER;
 	}
 	
-	// add 20 products to catalog (product ids starting around 20? not end of world but odd bug)
+	/**
+	 * Method test for adding 20 products to catalog (Business Process 4)
+	 * 
+	 */
 	public void testAddProducts() {
 		Result result;
 		List<Product> products = new LinkedList<Product>();
@@ -118,7 +133,10 @@ public class AutomatedTester {
 		}
 	}
 	
-	// Works great
+	/**
+	 * Method test for processing shipments (Business Process 7)
+	 * 
+	 */
 	public void testProcessShipments() {
 		Request.instance().reset();
 		Result result;
@@ -133,7 +151,10 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_FAILED;
 	}
 	
-	// Works great
+	/**
+	 * Method test for checking out (Business Process 5)
+	 * 
+	 */
 	public void testCheckOut() {
 		Request.instance().reset();
 		Result result;
@@ -153,7 +174,9 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_COMPLETED;
 	}
 	
-	// Works great
+	/**
+	 * Method test for changing price of a product (Business Process 8)
+	 */
 	public void testChangePrice() {
 		Request.instance().reset();
 		Result result;
@@ -167,6 +190,10 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_FAILED;
 	}
 	
+	/**
+	 * Method to run all tests
+	 * 
+	 */
 	public void test() {
 		testAddMembers();
 		testRemoveMember();
