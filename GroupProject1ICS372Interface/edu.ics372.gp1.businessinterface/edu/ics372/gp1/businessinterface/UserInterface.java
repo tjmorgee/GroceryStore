@@ -69,7 +69,9 @@ public class UserInterface {
 			retrieve();
 		} else {
 			groceryStore = GroceryStore.instance();
-			groceryStore.test();
+			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
+				groceryStore.test();
+			}
 		}
 
 	}
