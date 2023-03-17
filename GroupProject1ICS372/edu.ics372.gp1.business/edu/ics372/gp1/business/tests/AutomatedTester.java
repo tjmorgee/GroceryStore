@@ -70,7 +70,7 @@ public class AutomatedTester {
 		assert result.getResultCode() == Result.OPERATION_COMPLETED;
 		Request.instance().setMemberId("G4");
 		result = groceryStore.removeMember(Request.instance());
-		assert result.getResultCode() == Result.NO_SUCH_MEMBER;
+		assert result.getResultCode() == Result.OPERATION_FAILED;
 	}
 	
 	/**
