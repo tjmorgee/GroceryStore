@@ -40,6 +40,7 @@ public class Result extends DataTransfer {
 	public static final int ORDER_PLACED = 3;
 	public static final int NO_ORDER_FOUND = 4;
 	public static final int NO_SUCH_MEMBER = 5;
+	public static final int NOT_ENOUGH_STOCK = 6;
 
 	private int resultCode;
 
