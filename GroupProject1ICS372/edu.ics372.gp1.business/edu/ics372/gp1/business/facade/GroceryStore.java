@@ -110,14 +110,20 @@ public class GroceryStore implements Serializable {
 	public Result addLineItem(Request request) {
 		Result result = new Result();
 		Product product = catalog.search(request.getProductId());
-		LineItem lineItem = new LineItem(request.getProductName(), request.getProductPrice(), request.getQuantityPurchased());
-		if (cart.addLineItem(lineItem)) {
-			result = decreaseStock(request.getProductId(), request.getQuantityPurchased());
-			result.setLineItemFields(lineItem);
+		if(product.getStock() >= request.getQuantityPurchased()) {
+			LineItem lineItem = new LineItem(request.getProductName(), request.getProductPrice(), request.getQuantityPurchased());
+			if (cart.addLineItem(lineItem)) {
+				result = decreaseStock(request.getProductId(), request.getQuantityPurchased());
+				result.setLineItemFields(lineItem);
+				return result;
+			} else {
+				result.setResultCode(Result.OPERATION_FAILED);
+				return result;
+			}
+		} else {
+			result.setResultCode(Result.NOT_ENOUGH_STOCK);
 			return result;
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
-		return result;
 	}
 	
 	/**
@@ -138,7 +144,6 @@ public class GroceryStore implements Serializable {
 			orders.addOrder(order);
 			result.setResultCode(Result.ORDER_PLACED);
 		} else {
-			// Add something in here so you can't purchase a higher quantity than in stock
 			result.setResultCode(Result.OPERATION_COMPLETED);
 		}
 		return result;
