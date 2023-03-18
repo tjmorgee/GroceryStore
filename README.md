@@ -1,2 +1,2 @@
 # GroceryStore
-  readme
+  retrieve functionality currently broken by changing Date from String
