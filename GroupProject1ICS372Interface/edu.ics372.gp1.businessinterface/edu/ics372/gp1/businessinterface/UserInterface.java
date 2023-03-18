@@ -347,15 +347,16 @@ public class UserInterface {
 				result = groceryStore.addLineItem(Request.instance());
 				if (result.getResultCode() == Result.ORDER_PLACED) {
 					System.out.printf("Order for %s will be placed.\n", result.getProductName());
-				} else if (result.getResultCode() != Result.OPERATION_COMPLETED) {
-					displayResultCode(result.getResultCode());
+				} else if (result.getResultCode() == Result.NOT_ENOUGH_STOCK) {
+					System.out.println("Quantity wanted for purchase greater than available stock.");
 				}
-				receipt += (String.format("%-20s", result.getProductName()) + "\t"
-						+ result.getQuantityPurchased() + "\t$"
-						+ String.format("%3.2f", result.getProductPrice()) + "\t$"
-						+ String.format("%5.2f", result.getProductPrice() * result.getQuantityPurchased()) + "\n");
-				
-				total += result.getProductPrice() * result.getQuantityPurchased();
+				if (result.getResultCode() == Result.ORDER_PLACED || result.getResultCode() == Result.OPERATION_COMPLETED) {
+					receipt += (String.format("%-20s", result.getProductName()) + "\t"
+							+ result.getQuantityPurchased() + "\t$"
+							+ String.format("%3.2f", result.getProductPrice()) + "\t$"
+							+ String.format("%5.2f", result.getProductPrice() * result.getQuantityPurchased()) + "\n");
+					total += result.getProductPrice() * result.getQuantityPurchased();
+				}
 			} while (yesOrNo("Check out more items?"));
 			Request.instance().setTransactionAmount(total);
 			result = groceryStore.addTransaction(Request.instance());
